@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#e889a7">
+    <title>Our World</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extras.css">
+</head>
+
+<body>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="backgroundMusic" preload="none"></audio>
+
+
+<!-- =====================================================
+     LOGIN
+====================================================== -->
+<div id="loginPage" class="page">
+    <form id="loginForm" class="login-box" novalidate>
+
+        <div class="login-hearts" aria-hidden="true">♡ 💗 ♡</div>
+        <h1>Our World ♡</h1>
+
+        <label for="loginNameInput" data-i18n="login.name">Your name 💌</label>
+        <input type="text" id="loginNameInput" autocomplete="name"
+               data-i18n-ph="login.name.ph" placeholder="💗 your name here my love">
+
+        <label for="nameInput" data-i18n="login.email">Your email 💌</label>
+        <input type="email" id="nameInput" autocomplete="email"
+               data-i18n-ph="login.email.ph" placeholder="💗 my love put your email here 💌">
+
+        <label for="passwordInput" data-i18n="login.pass">Our password 💕</label>
+        <div class="input-eye">
+            <input type="password" id="passwordInput" autocomplete="current-password"
+                   data-i18n-ph="login.pass.ph" placeholder="🔐 and our password here habubu 💕">
+            <button type="button" class="eye-btn" data-action="togglePw" data-target="passwordInput"
+                    aria-label="Show password">👁️</button>
+        </div>
+
+        <p id="passwordError" class="form-error" role="alert"></p>
+
+        <button type="submit" class="primary-btn" data-i18n="login.enter">Enter ♡</button>
+
+        <div class="login-hearts small" aria-hidden="true">♡ 💕 ♡ 💗 ♡</div>
+    </form>
+</div>
+
+
+<!-- =====================================================
+     MAIN WEBSITE
+====================================================== -->
+<div id="mainPage" class="hidden">
+
+    <!-- top bar buttons -->
+    <button type="button" id="settingsButton" class="settings-icon" data-action="openSettings"
+            aria-label="Settings" title="Settings">
+        <span></span><span></span><span></span>
+    </button>
+
+    <button type="button" id="notificationsButton" class="notifications-button"
+        aria-label="Notifications" title="Notifications">
+    🔔
+    <span id="notificationBadge" class="notification-badge hidden">0</span>
+</button>
+
+    <img id="topProfileImage" class="top-profile-image hidden" src="" alt="Profile">
+    <div id="notificationsPanel" class="notifications-panel hidden">
+    <div class="notifications-header">
+        <h3>Notifications 🔔</h3>
+        <button type="button" id="closeNotifications" class="icon-btn" aria-label="Close">✕</button>
+    </div>
+     <button type="button" id="clearNotificationsButton" class="clear-notifications-button">
+    🗑️ Clear all notifications
+</button>
+    <div id="notificationsList" class="notifications-list">
+        <p class="notifications-empty">No notifications yet 💗</p>
+    </div>
+</div>
+<div id="clearNotificationsModal" class="clear-notifications-modal hidden">
+    <div class="clear-notifications-box">
+
+        <div class="clear-notifications-emoji">
+            😥😭
+        </div>
+
+        <h3>why why am i annoying you</h3>
+
+        <div class="clear-notifications-actions">
+            <button type="button" id="confirmClearNotifications" class="confirm-clear-button">
+                yeah you do
+            </button>
+
+            <button type="button" id="cancelClearNotifications" class="cancel-clear-button">
+                noooo my love
+            </button>
+        </div>
+
+    </div>
+</div>
+    <div id="settingsOverlay" class="scrim" data-action="closeSettings"></div>
+
+
+    <!-- =================================================
+         SETTINGS  (slides in from the LEFT, applies instantly)
+    ================================================== -->
+    <aside id="settings" class="settings-panel" aria-label="Settings" aria-hidden="true">
+
+        <header class="settings-head">
+            <h1 data-i18n="s.title">Settings</h1>
+            <span id="savedBadge" class="saved-badge" aria-live="polite">✓</span>
+            <button type="button" class="icon-btn" data-action="closeSettings" aria-label="Close">✕</button>
+        </header>
+
+        <div class="settings-body">
+
+            <!-- ACCOUNT -->
+            <section class="s-card account-card">
+                <div class="avatar">
+                    <img id="accountProfileImage" class="hidden" src="" alt="Profile">
+                    <span id="avatarFallback">💗</span>
+                    <label class="avatar-edit" for="profilePicture" title="Change photo">📷</label>
+                    <input type="file" id="profilePicture" accept="image/*" hidden>
+                </div>
+                <div class="account-fields">
+                    <label for="displayName" data-i18n="s.name">Display name</label>
+                    <input type="text" id="displayName" maxlength="30"
+                           data-i18n-ph="s.name.ph" placeholder="Enter your name">
+                </div>
+                <button type="button" class="ghost-btn" data-action="logout" data-i18n="s.logout">Log out</button>
+            </section>
+
+            <!-- CONNECTION -->
+            <section class="s-card">
+                <h2><span>💞</span> <b data-i18n="s.connection">Connection</b></h2>
+                <p class="s-hint" data-i18n="s.connection.hint">Connect with your special person ♡</p>
+
+                <div class="friend-card">
+                    <div class="friend-avatar">💗</div>
+                    <div class="friend-info">
+                        <strong id="friendName">Your Person</strong>
+                        <span id="friendStatus">Not connected yet</span>
+                    </div>
+                </div>
+
+                <button type="button" id="friendActionButton" class="primary-btn full"
+                        data-action="sendFriendRequest">♡ Add your lover</button>
+
+                <div id="friendRequestArea" class="friend-request hidden">
+                    <p data-i18n="s.friend.incoming">💌 You have a friend request</p>
+                    <div class="row-buttons">
+                        <button type="button" class="primary-btn" data-action="acceptFriend" data-i18n="s.friend.accept">💗 Accept</button>
+                        <button type="button" class="ghost-btn" data-action="declineFriend" data-i18n="s.friend.decline">Decline</button>
+                    </div>
+                </div>
+
+                <div id="connectedArea" class="friend-request hidden">
+                    <p data-i18n="s.friend.connected">💞 You are connected</p>
+                    <button type="button" class="primary-btn full" data-action="messageFromSettings"
+                            data-i18n="s.friend.message">💌 Message me</button>
+                </div>
+            </section>
+
+            <!-- LANGUAGE -->
+            <section class="s-card">
+                <h2><span>🌐</span> <b data-i18n="s.language">Language</b></h2>
+                <div class="seg" role="group">
+                    <button type="button" data-setting="language" data-value="English">English</button>
+                    <button type="button" data-setting="language" data-value="Arabic">العربية</button>
+                </div>
+            </section>
+
+            <!-- THEME -->
+            <section class="s-card">
+                <h2><span>🎨</span> <b data-i18n="s.theme">Theme</b></h2>
+                <div class="swatches">
+                    <button type="button" class="swatch" data-setting="theme" data-value="pink" style="--c1:#fff0f6;--c2:#e889a7"><i></i><span data-i18n="th.pink">Pink</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="sweet-love" style="--c1:#fff5fa;--c2:#f58ab3"><i></i><span data-i18n="th.sweet">Sweet</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="rose-love" style="--c1:#fff0f5;--c2:#e75480"><i></i><span data-i18n="th.rose">Rose</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="strawberry-love" style="--c1:#fff0f0;--c2:#ed4f64"><i></i><span data-i18n="th.strawberry">Strawberry</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="purple-love" style="--c1:#f3e6ff;--c2:#b06be8"><i></i><span data-i18n="th.purple">Purple</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="dreamy-love" style="--c1:#f7efff;--c2:#db8bdc"><i></i><span data-i18n="th.dreamy">Dreamy</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="lavender" style="--c1:#f7f2ff;--c2:#a88bd1"><i></i><span data-i18n="th.lavender">Lavender</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="blue" style="--c1:#f1f7ff;--c2:#79a9d8"><i></i><span data-i18n="th.blue">Blue</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="dark" style="--c1:#171419;--c2:#c982a1"><i></i><span data-i18n="th.dark">Dark</span></button>
+                    <button type="button" class="swatch" data-setting="theme" data-value="love-night" style="--c1:#17101c;--c2:#e879a8"><i></i><span data-i18n="th.night">Night</span></button>
+                </div>
+            </section>
+
+            <!-- NOTIFICATIONS -->
+            <section class="s-card">
+                <h2><span>🔔</span> <b data-i18n="s.notifications">Notifications</b></h2>
+                <label class="switch-row">
+                    <span data-i18n="s.notifications.toggle">Website notifications</span>
+                    <input type="checkbox" id="notificationsToggle" class="switch">
+                </label>
+                <button type="button" class="ghost-btn full" data-action="testNotification"
+                        data-i18n="s.notifications.test">🔔 Send a test notification</button>
+            </section>
+
+            <!-- MUSIC -->
+            <section class="s-card">
+                <h2><span>🎵</span> <b data-i18n="s.music">Music</b></h2>
+                <label class="switch-row">
+                    <span data-i18n="s.music.toggle">Background music</span>
+                    <input type="checkbox" id="musicToggle" class="switch">
+                </label>
+                <label for="musicTrack" data-i18n="s.music.track">Song</label>
+                <select id="musicTrack"></select>
+
+                <div class="now-playing-row">
+                    <button type="button" class="icon-btn" data-action="musicPrev" aria-label="Previous song">⏮</button>
+                    <div id="nowPlaying" class="now-playing" aria-live="polite"></div>
+                    <button type="button" class="icon-btn" data-action="musicSkip" aria-label="Next song">⏭</button>
+                </div>
+
+                <label data-i18n="s.music.mode">When a song ends</label>
+                <div class="seg" role="group">
+                    <button type="button" data-setting="musicMode" data-value="order" data-i18n="s.music.order">▶️ In order</button>
+                    <button type="button" data-setting="musicMode" data-value="repeat" data-i18n="s.music.repeat">🔁 Repeat</button>
+                    <button type="button" data-setting="musicMode" data-value="shuffle" data-i18n="s.music.shuffle">🔀 Shuffle</button>
+                </div>
+
+                <label for="musicNext" data-i18n="s.music.next">Play next (one time)</label>
+                <select id="musicNext"></select>
+
+                <input type="file" id="musicFile" accept="audio/*" multiple hidden>
+                <button type="button" class="ghost-btn full" data-action="pickMusicFile"
+                        data-i18n="s.music.add">🎵 Add music from my device</button>
+
+                <div id="myMusicBox" class="my-music hidden">
+                    <label data-i18n="s.music.mine">My added songs</label>
+                    <div id="myMusicList" class="my-music-list"></div>
+                </div>
+                <div class="range-row">
+                    <label for="volumeControl" data-i18n="s.volume">Volume</label>
+                    <input type="range" id="volumeControl" min="0" max="100" value="50">
+                    <span id="volumeValue" class="range-value">50%</span>
+                </div>
+            </section>
+
+            <!-- RELATIONSHIP -->
+            <section class="s-card">
+                <h2><span>💕</span> <b data-i18n="s.relationship">Our relationship</b></h2>
+                <label for="relationshipDate" data-i18n="s.startDate">Relationship start date</label>
+                <input type="date" id="relationshipDate">
+                <label for="firstMeetingDate" data-i18n="s.firstMeeting">First meeting / first message</label>
+                <input type="date" id="firstMeetingDate">
+                <div class="counters">
+                    <div class="counter"><strong id="daysTogether">0</strong><span data-i18n="s.daysTogether">Days together</span></div>
+                    <div class="counter"><strong id="daysSinceMeeting">0</strong><span data-i18n="s.daysSinceMeeting">Days since we met</span></div>
+                </div>
+            </section>
+
+            <!-- APPEARANCE -->
+            <section class="s-card">
+                <h2><span>🖼️</span> <b data-i18n="s.appearance">Appearance</b></h2>
+
+                <div class="color-row">
+                    <label for="backgroundColor" data-i18n="s.bgColor">Background color</label>
+                    <input type="color" id="backgroundColor" value="#fff0f6">
+                </div>
+                <div class="color-row">
+                    <label for="textColor" data-i18n="s.textColor">Text color</label>
+                    <input type="color" id="textColor" value="#3b3035">
+                </div>
+
+                <div class="range-row">
+                    <label for="backgroundGlow" data-i18n="s.glow">Glow</label>
+                    <input type="range" id="backgroundGlow" min="0" max="100" value="40">
+                    <span id="backgroundGlowValue" class="range-value">40%</span>
+                </div>
+
+                <label for="backgroundImage" data-i18n="s.bgImage">Background image</label>
+                <input type="file" id="backgroundImage" accept="image/*">
+                <button type="button" class="ghost-btn full" data-action="removeBackgroundImage"
+                        data-i18n="s.bgImage.remove">Remove background image</button>
+
+                <label for="bgOpacity">Background image opacity</label>
+                <input type="range" id="bgOpacity" min="10" max="100" value="100">
+
+                <label for="fontFamily" data-i18n="s.font">Font</label>
+                <select id="fontFamily">
+                    <option value="Arial">Arial</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Comic Sans MS">Comic Sans MS</option>
+                </select>
+
+                <label data-i18n="s.buttons">Button style</label>
+                <div class="seg" role="group">
+                    <button type="button" data-setting="buttonStyle" data-value="rounded" data-i18n="s.buttons.rounded">Rounded</button>
+                    <button type="button" data-setting="buttonStyle" data-value="soft" data-i18n="s.buttons.soft">Soft</button>
+                    <button type="button" data-setting="buttonStyle" data-value="square" data-i18n="s.buttons.square">Square</button>
+                </div>
+
+                <label data-i18n="s.fontSize">Font size</label>
+                <div class="seg" role="group">
+                    <button type="button" data-setting="fontSize" data-value="small" data-i18n="s.size.small">Small</button>
+                    <button type="button" data-setting="fontSize" data-value="medium" data-i18n="s.size.medium">Medium</button>
+                    <button type="button" data-setting="fontSize" data-value="large" data-i18n="s.size.large">Large</button>
+                </div>
+
+                <button type="button" class="ghost-btn full" data-action="resetAppearance"
+                        data-i18n="s.appearance.reset">Reset colors &amp; background</button>
+            </section>
+
+            <!-- PRIVACY -->
+            <section class="s-card">
+                <h2><span>🔒</span> <b data-i18n="s.privacy">Privacy</b></h2>
+                <label class="switch-row">
+                    <span data-i18n="s.privacy.lock">Auto-lock private sections</span>
+                    <input type="checkbox" id="privacyLock" class="switch">
+                </label>
+                <p class="s-hint" data-i18n="s.privacy.hint">When you leave the page, the private albums close and ask for the password again.</p>
+            </section>
+
+            <!-- DATA -->
+            <section class="s-card">
+                <h2><span>💾</span> <b data-i18n="s.data">Data</b></h2>
+                <button type="button" class="danger-btn full" data-action="clearSavedData"
+                        data-i18n="s.data.clear">Clear saved settings</button>
+                <button type="button" class="danger-btn full" data-action="resetWebsite"
+                        data-i18n="s.data.reset">Reset all website data</button>
+            </section>
+
+            <!-- ABOUT -->
+            <section class="s-card about">
+                <h2><span>ℹ️</span> <b data-i18n="s.about">About</b></h2>
+                <p><span data-i18n="s.about.created">Website created</span>: <strong>September 24, 2026</strong></p>
+                <p><span data-i18n="s.about.version">Version</span>: <strong>2.0.0</strong></p>
+            </section>
+
+        </div>
+    </aside>
+
+
+    <!-- =================================================
+         HOME
+    ================================================== -->
+    <main id="homePage" class="view">
+
+        <section class="welcome">
+            <h1 id="welcomeText">Welcome ♡</h1>
+            <p data-i18n="home.sub">Our little world</p>
+            <span id="homeDays" class="days-pill hidden"></span>
+        </section>
+
+        <div class="home-grid">
+
+            <button type="button" class="home-card" data-action="open" data-view="ourTime">
+                <span class="home-icon">⏳</span>
+                <span class="home-text">
+                    <b data-i18n="home.time">Our Time</b>
+                    <small data-i18n="home.time.sub">Songs, games and apps we share</small>
+                </span>
+            </button>
+
+            <button type="button" class="home-card" data-action="open" data-view="ourNotes">
+                <span class="home-icon">💌</span>
+                <span class="home-text">
+                    <b data-i18n="home.notes">Our Notes</b>
+                    <small data-i18n="home.notes.sub">Memories worth keeping</small>
+                </span>
+            </button>
+
+            <button type="button" class="home-card" data-action="open" data-view="messagesSection">
+                <span class="home-icon">💬</span>
+                <span class="home-text">
+                    <b data-i18n="home.messages">Message Me</b>
+                    <small data-i18n="home.messages.sub">Leave me a little message</small>
+                </span>
+            </button>
+
+            <button type="button" class="home-card" data-action="open" data-view="quiz">
+                <span class="home-icon">💗</span>
+                <span class="home-text">
+                    <b data-i18n="home.quiz">Who Knows Me Better?</b>
+                    <small data-i18n="home.quiz.sub">Let's see how well you know me</small>
+                </span>
+            </button>
+
+            <button type="button" class="home-card private" data-action="askPermission">
+                <span class="home-icon">🔒</span>
+                <span class="home-text">
+                    <b data-i18n="home.private">Ask Me For Permission</b>
+                    <small data-i18n="home.private.sub">Some things are just for us</small>
+                </span>
+            </button>
+            <button type="button" class="home-card" data-action="open" data-view="datesSection">
+                <span class="home-icon">📅</span>
+                <span class="home-text"><b data-i18n="home.dates">Our Dates</b><small data-i18n="home.dates.sub">Special days &amp; secret messages</small></span>
+            </button>
+
+        </div>
+    </main>
+
+
+    <!-- =================================================
+         OUR TIME
+    ================================================== -->
+    <section id="ourTime" class="view hidden">
+        <button type="button" class="back-button" data-action="back"><span class="arrow">‹</span> <span data-i18n="back">Back</span></button>
+
+        <header class="view-head">
+            <h2 data-i18n="time.title">Our Time ♡</h2>
+            <p data-i18n="time.sub">Pick something to enjoy together</p>
+        </header>
+
+        <div class="options-grid">
+            <button type="button" class="option-card" data-action="openMedia" data-type="songs">
+                <span class="option-icon">🎵</span><b data-i18n="time.songs">Our Songs</b>
+            </button>
+            <button type="button" class="option-card" data-action="openMedia" data-type="games">
+                <span class="option-icon">🎮</span><b data-i18n="time.games">Our Games</b>
+            </button>
+            <button type="button" class="option-card" data-action="openMedia" data-type="apps">
+                <span class="option-icon">📱</span><b data-i18n="time.apps">Our Apps</b>
+            </button>
+        </div>
+    </section>
+
+
+    <!-- =================================================
+         MEDIA (songs / games / apps)
+    ================================================== -->
+    <section id="mediaSection" class="view hidden">
+        <button type="button" class="back-button" data-action="back"><span class="arrow">‹</span> <span data-i18n="back">Back</span></button>
+
+        <header class="view-head">
+            <h2 id="mediaTitle"></h2>
+            <p id="mediaSubtitle"></p>
+        </header>
+
+        <div id="mediaGrid" class="media-grid"></div>
+    </section>
+
+
+    <!-- =================================================
+         OUR NOTES
+    ================================================== -->
+    <section id="ourNotes" class="view hidden">
+        <button type="button" class="back-button" data-action="back"><span class="arrow">‹</span> <span data-i18n="back">Back</span></button>
+
+        <header class="view-head">
+            <h2 data-i18n="notes.title">Our Notes 💌</h2>
+            <p data-i18n="notes.sub">Write your little memories, thoughts and moments together ♡</p>
+        </header>
+
+        <div class="notes-top-bar">
+            <button type="button" class="primary-btn" data-action="newNote" data-i18n="notes.new">＋ New note</button>
+        </div>
+
+        <div id="noteEditor" class="note-editor hidden">
+            <div class="note-editor-header">
+                <h3 id="noteEditorTitle">New Note 💗</h3>
+                <button type="button" class="icon-btn" data-action="closeNoteEditor" aria-label="Close">✕</button>
+            </div>
+
+            <label for="noteTitle" data-i18n="notes.f.title">Title</label>
+            <input type="text" id="noteTitle" data-i18n-ph="notes.f.title.ph" placeholder="Give this memory a name...">
+
+            <label for="noteDate" data-i18n="notes.f.date">Date</label>
+            <input type="date" id="noteDate">
+
+            <label for="noteText" data-i18n="notes.f.text">Your note</label>
+            <textarea id="noteText" rows="7" data-i18n-ph="notes.f.text.ph" placeholder="Write something you want to remember..."></textarea>
+
+            <label data-i18n="notes.f.photos">Photos 📷</label>
+            <input type="file" id="noteImages" accept="image/*" multiple hidden>
+            <button type="button" class="ghost-btn" data-action="pickNoteImages" data-i18n="notes.f.add">📷 Add photos</button>
+            <div id="noteImagePreview" class="note-image-preview"></div>
+
+            <div class="row-buttons">
+                <button type="button" class="primary-btn" data-action="saveNote" data-i18n="notes.save">💗 Save note</button>
+                <button type="button" class="ghost-btn" data-action="closeNoteEditor" data-i18n="notes.cancel">Cancel</button>
+            </div>
+        </div>
+
+        <div id="notesList" class="notes-list"></div>
+    </section>
+
+
+    <!-- =================================================
+         MESSAGE ME
+    ================================================== -->
+    <section id="messagesSection" class="view hidden">
+        <button type="button" class="back-button" data-action="back"><span class="arrow">‹</span> <span data-i18n="back">Back</span></button>
+
+        <header class="view-head">
+            <h2 data-i18n="msg.title">Message Me 💌</h2>
+            <p data-i18n="msg.sub">Leave a little message for me</p>
+        </header>
+
+        <div id="messagesList" class="messages-list"></div>
+
+       <div class="message-input-area">
+
+    <textarea
+        id="messageInput"
+        rows="2"
+        data-i18n-ph="msg.ph"
+        placeholder="Write your message..."
+    ></textarea>
+
+    <button
+        type="button"
+        class="voice-record-button"
+        id="voiceRecordButton"
+        data-action="toggleVoiceRecording"
+        aria-label="Record voice message"
+    >
+        🎙️
+    </button>
+
+    <label
+        class="image-message-button"
+        for="imageMessageInput"
+        title="Send image"
+    >
+        📷
+    </label>
+
+    <input
+        type="file"
+        id="imageMessageInput"
+        accept="image/*"
+        hidden
+    >
+
+    <button
+        type="button"
+        class="primary-btn"
+        data-action="sendMessage"
+        data-i18n="msg.send"
+    >
+        Send 💕
+    </button>
+
+</div>
+
+<div
+    id="imageMessagePreview"
+    class="image-message-preview hidden"
+></div>
+
+<div
+    id="voiceRecordingStatus"
+    class="voice-recording-status hidden"
+></div>
+    </section>
+
+
+    <!-- =================================================
+         QUIZ
+    ================================================== -->
+    <section id="quiz" class="view hidden">
+        <button type="button" class="back-button" data-action="back"><span class="arrow">‹</span> <span data-i18n="back">Back</span></button>
+
+        <div id="quizContainer" class="quiz-card">
+            <header class="view-head">
+                <h2 data-i18n="quiz.title">Who Knows Me Better? 💕</h2>
+                <p id="questionNumber"></p>
+            </header>
+
+            <div class="quiz-progress"><i id="quizBar"></i></div>
+
+            <h3 id="questionText"></h3>
+
+            <div id="quizOptions" class="quiz-options"></div>
+            <input type="text" id="answerInput" autocomplete="off" data-i18n-ph="quiz.ph" placeholder="Your answer...">
+
+            <div id="answerInputsContainer" class="answer-inputs hidden"></div>
+
+            <button type="button" id="addMoreAnswer" class="ghost-btn hidden" data-action="addMoreAnswer"
+                    data-i18n="quiz.more">+ Add another answer</button>
+
+            <button type="button" class="primary-btn full" data-action="nextQuestion" data-i18n="quiz.next">Next question 💗</button>
+        </div>
+
+        <div id="quizFinished" class="quiz-card quiz-finished hidden">
+            <h2 data-i18n="quiz.done">Quiz finished! 💕</h2>
+            <div id="quizResult" class="quiz-result"></div>
+            <p id="quizMessage" class="quiz-message"></p>
+            <button type="button" class="primary-btn" data-action="startQuiz" data-i18n="quiz.again">Play again 💕</button>
+        </div>
+    </section>
+
+
+    <!-- =================================================
+         ASK ME FOR PERMISSION  (albums list)
+         Only reachable after the main password (9981)
+    ================================================== -->
+    <section id="privateSection" class="view hidden">
+        <div id="emojiRain" aria-hidden="true"></div>
+
+        <button type="button" class="back-button" data-action="back"><span class="arrow">‹</span> <span data-i18n="back">Back</span></button>
+
+        <header class="view-head">
+            <h2 data-i18n="priv.title">My Albums 📸</h2>
+            <p data-i18n="priv.sub">Choose an album to open</p>
+        </header>
+
+        <div id="albumGrid" class="album-grid"></div>
+    </section>
+
+
+    <!-- =================================================
+         ALBUM PHOTOS
+    ================================================== -->
+    <section id="albumPhotos" class="view hidden">
+        <button type="button" class="back-button" data-action="back"><span class="arrow">‹</span> <span data-i18n="back">Back</span></button>
+
+        <header class="view-head">
+            <h2 id="openedAlbumTitle"></h2>
+        </header>
+
+        <div id="elegantGallery"  class="album-design elegant hidden"></div>
+        <div id="polaroidGallery" class="album-design polaroid hidden"></div>
+        <div id="masonryGallery"  class="album-design masonry hidden"></div>
+
+        <div id="featuredGallery" class="album-design featured hidden">
+            <div class="featured-main">
+                <button type="button" class="gallery-arrow prev" data-action="featuredPrev" aria-label="Previous">‹</button>
+                <img id="featuredMainImage" src="" alt="Photo">
+                <button type="button" class="gallery-arrow next" data-action="featuredNext" aria-label="Next">›</button>
+            </div>
+            <div id="featuredThumbnails" class="featured-thumbs"></div>
+            <div id="featuredCounter" class="counter-pill"></div>
+        </div>
+
+        <div id="fullscreenGallery" class="album-design fullscreen hidden">
+            <button type="button" class="fs-close" data-action="back" aria-label="Close">✕</button>
+            <button type="button" class="fs-arrow prev" data-action="fsPrev" aria-label="Previous">‹</button>
+            <img id="fullscreenImage" src="" alt="Photo">
+            <button type="button" class="fs-arrow next" data-action="fsNext" aria-label="Next">›</button>
+            <div id="fullscreenCounter" class="counter-pill"></div>
+        </div>
+    </section>
+
+</div><!-- /mainPage -->
+
+
+<!-- =====================================================
+     LARGE IMAGE VIEWER
+====================================================== -->
+<div id="imageViewer" class="viewer" aria-hidden="true">
+    <button type="button" class="viewer-close" data-action="closeViewer" aria-label="Close">✕</button>
+    <button type="button" class="viewer-arrow prev" data-action="viewerPrev" aria-label="Previous">‹</button>
+    <img id="imageViewerImage" src="" alt="Large photo">
+    <button type="button" class="viewer-arrow next" data-action="viewerNext" aria-label="Next">›</button>
+</div>
+
+
+<!-- =====================================================
+     PASSWORD WINDOW  (used for 9981 and the two locked albums)
+====================================================== -->
+<div id="passwordModal" class="modal" aria-hidden="true">
+    <div class="modal-scrim" data-action="closePassword"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+        <button type="button" class="icon-btn modal-x" data-action="closePassword" aria-label="Close">✕</button>
+        <div id="pwIcon" class="modal-icon">🔒</div>
+        <h3 id="pwTitle"></h3>
+        <p id="pwHint"></p>
+        <div class="input-eye">
+            <input type="password" id="pwInput" inputmode="numeric" autocomplete="off" data-i18n-ph="pw.ph" placeholder="Enter the password...">
+            <button type="button" class="eye-btn" data-action="togglePw" data-target="pwInput" aria-label="Show password">👁️</button>
+        </div>
+        <p id="pwError" class="form-error" role="alert"></p>
+        <button type="button" class="primary-btn full" data-action="submitPassword" data-i18n="pw.unlock">Unlock 💕</button>
+    </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+<!-- =====================================================
+     SCRIPTS
+====================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    var SUPABASE_URL = "https://krigthskbiifrzmayzaa.supabase.co";
+    var SUPABASE_PUBLISHABLE_KEY = "sb_publishable_f0cUvEweAOHYBi4rgRwaeg_hcJi7AaY";
+    var supabaseClient = null;
+    try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    } catch (error) {
+        console.error("Supabase could not be loaded:", error);
+    }
+</script>
+<script src="script.js"></script>
+<script src="extras.js"></script>
+
+</body>
+</html>
