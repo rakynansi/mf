@@ -2,6 +2,15 @@
    OUR WORLD  –  script.js  (v2)
    Everything lives inside one closure so nothing clashes.
 ===================================================== */
+/* Safe access to the Supabase client (it is created in another file).
+   Returns null instead of throwing "supabaseClient is not defined". */
+function owSupabase() {
+    try {
+        if (typeof supabaseClient !== "undefined" && supabaseClient) return supabaseClient;
+        return window.supabaseClient || null;
+    } catch (e) { return null; }
+}
+
 (function () {
     "use strict";
 
@@ -17,24 +26,23 @@
     //  2) change only the text inside  name: "..."  to the real song name
     //  To add a song: copy one line and change the file name.
     // =====================================================
-    const MUSIC_TRACKS = [
-        { name: "Our song 1", file: "./music/music1.mp3" },
-        { name: "Our song 2", file: "./music/music2.mp3" },
-        { name: "Our song 3", file: "./music/music3.mp3" },
-        { name: "Our song 4", file: "./music/music4.mp3" },
-        { name: "Our song 5", file: "./music/music5.mp3" },
-        { name: "Our song 6", file: "./music/music6.mp3" },
-        { name: "Our song 7", file: "./music/music7.mp3" },
-        { name: "Our song 8", file: "./music/music8.mp3" },
-        { name: "Our song 9", file: "./music/music9.mp3" },
-        { name: "Our song 10", file: "./music/music10.mp3" },
-        { name: "Our song 11", file: "./music/music11.mp3" },
-        { name: "Our song 12", file: "./music/music12.mp3" },
-        { name: "Our song 13", file: "./music/music13.mp3" },
-        { name: "Our song 14", file: "./music/music14.mp3" },
-        { name: "Our song 15", file: "./music/music15.mp3" },
-        { name: "Our song 16", file: "./music/music16.mp3" },
-        { name: "Our song 17", file: "./music/music17.mp3" }
+   const MUSIC_TRACKS = [
+        { name: "• L’Art Du Savoir • (Slowed)", file: "./music/music1.mp3" },
+        { name: "505", file: "./music/music2.mp3" },
+        { name: "Ecstacy", file: "./music/music3.mp3" },
+        { name: "Headlock", file: "./music/music4.mp3" },
+        { name: "Wael Kfoury - Layel W Raad _ وائل كفوري - ليل و رعد", file: "./music/music5.mp3" },
+        { name: "I love you so", file: "./music/music6.mp3" },
+        { name: "I'll Keep You Safe", file: "./music/music7.mp3" },
+        { name: "Meen Ysadak", file: "./music/music8.mp3" },
+        { name: "Not Allowed", file: "./music/music9.mp3" },
+        { name: "Ragebait", file: "./music/music10.mp3" },
+        { name: "schnuffel - bunny party (slowed + reverb)", file: "./music/music11.mp3" },
+        { name: "Self Aware", file: "./music/music12.mp3" },
+        { name: "Me and you", file: "./music/music13.mp3" },
+        { name: "The Perfect Girl", file: "./music/music14.mp3" },
+        { name: "Those Eyes", file: "./music/music15.mp3" }
+       
     ];
 
   function imgs(prefix, count) {
@@ -49,6 +57,12 @@
         legs:    { design: "masonry",    cover: "./images/legs3.jpeg",    photos: imgs("legs", 5) },
         private: { design: "featured",   cover: "./images/private3.jpeg", photos: imgs("private", 7), password: "5002" },
         secret:  { design: "fullscreen", cover: "./images/secret4.png",  photos: imgs("secret", 15),  password: "4002" }
+    };
+
+    // Used by extras.js -> checkFiles() to find photos / songs missing on the live site
+    window.OW_FILES = {
+        music: MUSIC_TRACKS.map(function (x) { return x.file; }),
+        images: Object.keys(ALBUMS).reduce(function (a, k) { return a.concat([ALBUMS[k].cover], ALBUMS[k].photos); }, [])
     };
 
     // Songs / games / apps shown in "Our Time". Change the names and links as you like.
@@ -88,18 +102,19 @@
         "You are my favorite person 💗"
     ];
 
-    const quizQuestions = [
-        { question: "What is my favorite color?", answers: ["green"] },
-        { question: "What is my favorite game?", answers: ["mobile legends", "mlbb", "mobile legends mlbb"] },
+    const quizLevel1 = [
+        { question: "What is my favorite color?", answers: ["green", "the color green", "light green", "dark green", "أخضر", "الأخضر", "اخضر", "الاخضر"] },
+        { question: "What is my favorite game?", answers: ["mobile legends", "mlbb", "mobile legends mlbb", "mobile legend", "ml", "mobile legends bang bang", "موبايل ليجندز"] },
         { question: "What is something I really like about people?", answers: ["intelligence", "people who don't judge", "ppl who dont judge", "honesty", "people who don't judge and honesty", "intelligence honesty", "intelligence and honesty"] },
-        { question: "What is my favorite food?", answers: ["pizza", "rafissa", "rfissa"] },
-        { question: "What is something that makes me happy?", answers: ["darvan", "you", "talking to darvan", "darvan and you"] },
-        { question: "What is something I dislike?", answers: ["lying"] },
-        { question: "What is my dream place to visit?", answers: ["germany"] },
-        { question: "What is my favorite thing to do?", answers: ["playing games", "talking to darvan", "playing games and talking to darvan"] },
-        { question: "What is something I am afraid of?", answers: ["dark water", "deep dark water", "losing darvan", "dark water and losing darvan"] },
-        { question: "What is something special about me?", answers: ["my personality"] }
+        { question: "What is my favorite food?", answers: ["pizza", "rafissa", "rfissa", "rfisa", "rafisa", "rfissa", "pizza and rfissa", "بيتزا", "رفيسة"] },
+        { question: "What is something that makes me happy?", answers: ["darvan", "you", "talking to darvan", "darvan and you", "talking to you", "you darvan", "دارفان", "انت", "أنت", "الكلام مع دارفان"] },
+        { question: "What is something I dislike?", answers: ["lying", "liars", "liar", "lies", "lie", "people who lie", "being lied to", "الكذب", "الكذابين"] },
+        { question: "What is my dream place to visit?", answers: ["germany", "deutschland", "german", "ألمانيا", "المانيا"] },
+        { question: "What is my favorite thing to do?", answers: ["playing games", "talking to darvan", "playing games and talking to darvan", "games", "gaming", "play games", "talking to you", "لعب الالعاب", "اللعب", "الالعاب"] },
+        { question: "What is something I am afraid of?", answers: ["dark water", "deep dark water", "losing darvan", "dark water and losing darvan", "deep water", "the dark water", "losing you", "المياه المظلمة", "الماء المظلم", "فقدان دارفان"] },
+        { question: "What is something special about me?", answers: ["my personality", "personality", "your personality", "the way i am", "شخصيتي", "شخصيتك"] }
     ];
+    let quizQuestions = quizLevel1;          // the questions of the level being played
 
 
     /* =================================================
@@ -178,6 +193,18 @@
         "s.saved": ["Saved ✓", "تم الحفظ ✓"],
         "s.badImage": ["Could not read this image.", "تعذر قراءة هذه الصورة."],
         "msg.confirmDelete": ["Delete this message?", "حذف هذه الرسالة؟"],
+        "msg.del.q": ["Are you worried about my storage 😭😑", "هل أنت قلقان على مساحة التخزين عندي 😭😑"],
+        "msg.del.yes": ["yeah", "أيوه"],
+        "msg.del.no": ["No I want your laptop get f", "لا، أريد أن يخرب لابتوبك"],
+        "msg.react.fail": ["Reactions need the one-time Supabase setup 💗", "التفاعلات تحتاج إعداد Supabase لمرة واحدة 💗"],
+        "alb.dl.all": ["⬇️ Download album", "⬇️ تنزيل الألبوم"],
+        "alb.dl.one": ["⬇️ Download photo", "⬇️ تنزيل الصورة"],
+        "alb.dl.busy": ["Preparing your photos… 💗", "جارٍ تحضير الصور… 💗"],
+        "alb.dl.done": ["Downloaded ✅", "تم التنزيل ✅"],
+        "quiz.level": ["Level", "المستوى"],
+        "quiz.next.level": ["Next level 🚀", "المستوى التالي 🚀"],
+        "quiz.level.done": ["Level {l} complete! 🎉", "انتهى المستوى {l}! 🎉"],
+        "quiz.all.done": ["You finished all 10 levels 💗 you really know me", "أنهيت المستويات العشرة 💗 أنت فعلًا تعرفني"],
         "s.storageFull": ["Not enough storage to save this. Try a smaller image.", "لا توجد مساحة كافية للحفظ. جرّب صورة أصغر."],
         "s.confirm.clear": ["Clear your saved settings?", "هل تريد مسح إعداداتك المحفوظة؟"],
         "s.confirm.reset": ["Reset the entire website? Notes and settings will be deleted.", "إعادة ضبط الموقع بالكامل؟ سيتم حذف الملاحظات والإعدادات."],
@@ -247,7 +274,7 @@
         "quiz.more": ["+ Add another answer", "+ إضافة إجابة أخرى"],
         "quiz.next": ["Next question 💗", "السؤال التالي 💗"],
         "quiz.done": ["Quiz finished! 💕", "انتهى الاختبار! 💕"],
-        "quiz.again": ["Play again 💕", "العب مجددًا 💕"],
+        "quiz.again": ["Retry this level 🔁", "أعد هذا المستوى 🔁"],
         "quiz.need": ["Please answer the question first 💗", "من فضلك أجب عن السؤال أولًا 💗"],
         "quiz.result": ["You got {n} / {total} correct 💕 ({p}%)", "أجبت {n} / {total} إجابة صحيحة 💕 ({p}%)"],
         "quiz.m0": ["really? 😭", "بجد؟ 😭"],
@@ -325,6 +352,7 @@
     const show = function (el) { if (el) el.classList.remove("hidden"); };
     const hide = function (el) { if (el) el.classList.add("hidden"); };
     const clamp = function (n, min, max) { return Math.min(max, Math.max(min, n)); };
+    const onReady = function (fn) { if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn); else fn(); };
 
     const store = {
         get: function (key, fallback) {
@@ -653,7 +681,7 @@
     }
 
     function resetAppearance() {
-        cfg.backgroundColor = ""; cfg.textColor = ""; cfg.backgroundGlow = 40;
+        cfg.backgroundColor = ""; cfg.textColor = ""; cfg.backgroundGlow = 40; cfg.bgOpacity = 100;
         cfg.backgroundImage = ""; store.del(KEY.bg);
         saveSettingsData();
         applySettings();
@@ -902,13 +930,13 @@
         toast(t("music.missing"));
     }
 
-    (function wireMusic() {
+    function wireMusic() {
         const audio = $("backgroundMusic");
         if (!audio) return;
         audio.addEventListener("ended", onMusicEnded);
         audio.addEventListener("error", onMusicError);
         audio.addEventListener("playing", function () { skipTries = 0; });
-    })();
+    }
 
     // Songs picked from the phone / computer: saved in the browser next to your own songs.
     async function handleMusicFiles(fileList) {
@@ -986,23 +1014,23 @@
 
     let notificationInterval = null, notificationTimeout = null;
 
-   async function notify(title, body, skipLog) {
-    if (!skipLog && window.pushNotice) window.pushNotice(title, body);
-    if (!("Notification" in window) || Notification.permission !== "granted") {
-        return false;
-    }
+    async function notify(title, body, skipLog) {
+        if (!skipLog && window.pushNotice) window.pushNotice(title, body);
+        if (!("Notification" in window) || Notification.permission !== "granted") return false;
 
-    try {
-        new Notification(title, {
-            body: body
-        });
-
-        return true;
-    } catch (error) {
-        console.error("Notification error:", error);
-        return false;
+        try {
+            new Notification(title, { body: body });
+            return true;
+        } catch (error) {
+            // Android Chrome: "new Notification()" is not allowed, use the service worker instead
+            try {
+                const reg = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistration() : null;
+                if (reg && reg.showNotification) { await reg.showNotification(title, { body: body }); return true; }
+            } catch (e2) { console.error("Notification error:", e2); }
+            console.error("Notification error:", error);
+            return false;
+        }
     }
-}
 
     async function askNotificationPermission() {
         if (!("Notification" in window)) { alert(t("n.unsupported")); return false; }
@@ -1015,7 +1043,7 @@
     async function testNotification() {
     const user = await getCurrentUser();
 
-    if (!user) {
+    if (!user || !owSupabase()) {
         toast("Please log in first.");
         return;
     }
@@ -1024,7 +1052,7 @@
     const body = t("n.test");
 
     // Save notification to Supabase
-    const { error } = await supabaseClient
+    const { error } = await owSupabase()
         .from("notifications")
         .insert([{
             user_id: user.id,
@@ -1284,7 +1312,7 @@
             return;
         }
         $("pwError").textContent = t("pw.wrong");
-        const card = document.querySelector(".modal-card");
+        const card = $("passwordModal").querySelector(".modal-card") || $("passwordModal");
         card.classList.remove("shake");
         void card.offsetWidth;
         card.classList.add("shake");
@@ -1337,11 +1365,11 @@
         if (!name) { error.textContent = t("err.name"); return; }
         if (!email) { error.textContent = t("err.email"); return; }
         if (!password) { error.textContent = t("err.pass"); return; }
-        if (!supabaseClient) { error.textContent = t("err.offline"); return; }
+        if (!owSupabase()) { error.textContent = t("err.offline"); return; }
         error.textContent = "";
 
         let result;
-        try { result = await supabaseClient.auth.signInWithPassword({ email: email, password: password }); }
+        try { result = await owSupabase().auth.signInWithPassword({ email: email, password: password }); }
         catch (e) { console.error(e); error.textContent = t("err.offline"); return; }
 
         if (result.error || !result.data || !result.data.user) {
@@ -1354,8 +1382,10 @@
         cfg.name = name;
         saveSettingsData();
 
-        const upsert = await supabaseClient.from("profiles").upsert({ id: currentUser.id, name: name });
-        if (upsert.error) console.error("Profile error:", upsert.error);
+        try {
+            const upsert = await owSupabase().from("profiles").upsert({ id: currentUser.id, name: name });
+            if (upsert.error) console.error("Profile error:", upsert.error);
+        } catch (e) { console.error("Profile error:", e); }
 
         passInput.value = "";
         showMainPage();
@@ -1369,8 +1399,8 @@
     }
 
     async function pushProfileName() {
-        if (!supabaseClient || !currentUser) return;
-        const result = await supabaseClient.from("profiles").update({ name: cfg.name }).eq("id", currentUser.id);
+        if (!owSupabase() || !currentUser) return;
+        const result = await owSupabase().from("profiles").update({ name: cfg.name }).eq("id", currentUser.id);
         if (result.error) console.error("Could not update profile name:", result.error);
     }
 
@@ -1393,10 +1423,13 @@
 
     async function logout() {
         saveSettingsData();
-        if (supabaseClient) {
-            const result = await supabaseClient.auth.signOut();
-            if (result.error) console.error("Logout error:", result.error);
+        if (owSupabase()) {
+            try {
+                const result = await owSupabase().auth.signOut();
+                if (result.error) console.error("Logout error:", result.error);
+            } catch (e) { console.error("Logout error:", e); }
         }
+        lastMessagesSig = "";
         currentUser = otherUser = currentFriendRequest = null;
         friendUI = { status: "none", name: "" };
         stopSiteNotifications();
@@ -1404,12 +1437,12 @@
         pauseMusic();
         showLoginPage();
         ["loginNameInput", "nameInput", "passwordInput"].forEach(function (id) { if ($(id)) $(id).value = ""; });
-        $("passwordError").textContent = "";
+        if ($("passwordError")) $("passwordError").textContent = "";
     }
 
     async function getCurrentUser() {
-        if (!supabaseClient) return null;
-        const result = await supabaseClient.auth.getUser();
+        if (!owSupabase()) return null;
+        const result = await owSupabase().auth.getUser();
         if (result.error || !result.data || !result.data.user) { currentUser = null; return null; }
         currentUser = result.data.user;
         return currentUser;
@@ -1419,16 +1452,16 @@
     async function getOtherUser() {
         if (!currentUser) await getCurrentUser();
         if (!currentUser) return null;
-        const result = await supabaseClient.from("profiles").select("id, name").neq("id", currentUser.id).limit(1);
+        const result = await owSupabase().from("profiles").select("id, name").neq("id", currentUser.id).limit(1);
         if (result.error || !result.data || !result.data.length) { if (result.error) console.error(result.error); return null; }
         otherUser = result.data[0];
         return otherUser;
     }
 
     async function restoreSession() {
-        if (!supabaseClient) return;
+        if (!owSupabase()) return;
         try {
-            const result = await supabaseClient.auth.getSession();
+            const result = await owSupabase().auth.getSession();
             const session = result.data && result.data.session;
             if (!session || !session.user) return;
             currentUser = session.user;
@@ -1437,7 +1470,7 @@
             if (cfg.music) playMusic(false);
             if (cfg.notifications) startSiteNotifications();
 
-            const profile = await supabaseClient.from("profiles").select("name").eq("id", currentUser.id).maybeSingle();
+            const profile = await owSupabase().from("profiles").select("name").eq("id", currentUser.id).maybeSingle();
             if (profile.error) console.error("Could not load profile:", profile.error);
             if (profile.data && profile.data.name) {
                 cfg.name = profile.data.name;
@@ -1464,6 +1497,7 @@
     function renderFriendUI() {
         const status = friendUI.status;
         const button = $("friendActionButton");
+        if (!button) return;
         if ($("friendName")) $("friendName").textContent = friendUI.name || t("fr.your");
         hide($("friendRequestArea"));
         hide($("connectedArea"));
@@ -1472,7 +1506,7 @@
         button.textContent = t("fr.add");
 
         const label = { none: "fr.none", rejected: "fr.none", outgoing: "fr.outgoing", incoming: "fr.incoming", accepted: "fr.accepted" }[status] || "fr.none";
-        $("friendStatus").textContent = t(label);
+        if ($("friendStatus")) $("friendStatus").textContent = t(label);
 
         if (status === "outgoing") { button.textContent = t("fr.sent"); button.disabled = true; }
         if (status === "incoming") { hide(button); show($("friendRequestArea")); }
@@ -1480,11 +1514,13 @@
     }
 
     function sameCouple(request, a, b) {
+        if (request.sender_id !== a && request.sender_id !== b) return false;
+        if (!request.receiver_id) return true;      // old requests saved without receiver_id
         return (request.sender_id === a && request.receiver_id === b) || (request.sender_id === b && request.receiver_id === a);
     }
 
     async function loadFriendConnection() {
-    if (!supabaseClient) return;
+    if (!owSupabase()) return;
 
     const user = await getCurrentUser();
     if (!user) return;
@@ -1496,10 +1532,10 @@
         return;
     }
 
-    const result = await supabaseClient
+    const result = await owSupabase()
         .from("friend_requests")
         .select("*")
-        .or("sender_id.eq." + user.id + ",receiver_id.eq." + user.id)
+        .or("sender_id.eq." + user.id + ",receiver_id.eq." + user.id + ",sender_id.eq." + friend.id)
         .order("created_at", { ascending: false });
 
     if (result.error) {
@@ -1542,32 +1578,32 @@
         const friend = await getOtherUser();
         if (!friend) { alert(t("fr.notFound")); return; }
 
-        const existingResult = await supabaseClient.from("friend_requests").select("*")
-            .or("sender_id.eq." + user.id + ",receiver_id.eq." + user.id);
+        const existingResult = await owSupabase().from("friend_requests").select("*")
+            .or("sender_id.eq." + user.id + ",receiver_id.eq." + user.id + ",sender_id.eq." + friend.id);
         if (existingResult.error) { console.error(existingResult.error); alert(t("fr.fail")); return; }
 
         const existing = (existingResult.data || []).find(function (r) { return sameCouple(r, user.id, friend.id); });
         if (existing && existing.status === "accepted") { toast(t("fr.already")); await loadFriendConnection(); return; }
         if (existing && existing.status === "pending") { toast(t("fr.exists")); await loadFriendConnection(); return; }
         if (existing && existing.status === "rejected") {
-            const del = await supabaseClient.from("friend_requests").delete().eq("id", existing.id);
+            const del = await owSupabase().from("friend_requests").delete().eq("id", existing.id);
             if (del.error) { console.error(del.error); alert(t("fr.fail")); return; }
         }
 
-        const insert = await supabaseClient.from("friend_requests").insert([{ sender_id: user.id, status: "pending" }]);
-        if (insert.error) { console.error(insert.error); alert(t("fr.fail")); return; }
+        const insert = await owSupabase().from("friend_requests").insert([{ sender_id: user.id, receiver_id: friend.id, status: "pending" }]);
+        if (insert.error) { console.error(insert.error); alert(t("fr.fail") + "\n" + (insert.error.message || "")); return; }
         await loadFriendConnection();
     }
 
     async function answerFriendRequest(status) {
         const user = await getCurrentUser();
         if (!user) return;
-        if (!currentFriendRequest || currentFriendRequest.status !== "pending" || currentFriendRequest.receiver_id !== user.id) {
+        if (!currentFriendRequest || currentFriendRequest.status !== "pending" || currentFriendRequest.sender_id === user.id) {
             await loadFriendConnection();
             return;
         }
-        const result = await supabaseClient.from("friend_requests").update({ status: status }).eq("id", currentFriendRequest.id);
-        if (result.error) { console.error(result.error); alert(t("fr.fail")); return; }
+        const result = await owSupabase().from("friend_requests").update({ status: status }).eq("id", currentFriendRequest.id);
+        if (result.error) { console.error(result.error); alert(t("fr.fail") + "\n" + (result.error.message || "")); return; }
         await loadFriendConnection();
     }
 
@@ -1837,10 +1873,12 @@
     ================================================= */
 
     let messagePoll = null;
+    let messagesReq = 0, lastMessagesSig = "";
 
     let voiceRecorder = null;
 let voiceChunks = [];
 let voiceRecordingStartedAt = null;
+let voiceRecordingStoppedAt = null;
 let voiceRecordingTimer = null;
 
 
@@ -1867,7 +1905,7 @@ async function toggleVoiceRecording() {
         return;
     }
 
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined") {
         alert("Voice recording is not supported by this browser.");
         return;
     }
@@ -1902,6 +1940,8 @@ async function toggleVoiceRecording() {
 
         voiceRecorder.onstop = async function () {
 
+            voiceRecordingStoppedAt = Date.now();
+
             stream.getTracks().forEach(function (track) {
                 track.stop();
             });
@@ -1909,7 +1949,7 @@ async function toggleVoiceRecording() {
             clearInterval(voiceRecordingTimer);
 
             button.classList.remove("recording");
-            button.innerHTML = window.MIC_SVG;
+            button.innerHTML = window.MIC_SVG || "🎤";
 
             status.classList.add("hidden");
 
@@ -1922,7 +1962,7 @@ async function toggleVoiceRecording() {
         voiceRecordingStartedAt = Date.now();
 
         button.classList.add("recording");
-        button.innerHTML = window.STOP_SVG;
+        button.innerHTML = window.STOP_SVG || "⏹";
 
         status.classList.remove("hidden");
         status.textContent = "Recording... 0:00";
@@ -1976,15 +2016,18 @@ async function uploadVoiceMessage() {
 
     if (!user) return;
 
+    const recordedType = ((voiceRecorder && voiceRecorder.mimeType) || "audio/webm").split(";")[0] || "audio/webm";
+    const voiceExt = /mp4|aac|m4a/.test(recordedType) ? "m4a" : /ogg/.test(recordedType) ? "ogg" : "webm";
+
     const audioBlob = new Blob(
         voiceChunks,
-        { type: "audio/webm" }
+        { type: recordedType }
     );
 
     const duration = Math.max(
         1,
         Math.floor(
-            (Date.now() - voiceRecordingStartedAt) / 1000
+            ((voiceRecordingStoppedAt || Date.now()) - voiceRecordingStartedAt) / 1000
         )
     );
 
@@ -1992,20 +2035,20 @@ async function uploadVoiceMessage() {
         user.id +
         "/" +
         Date.now() +
-        ".webm";
+        "." + voiceExt;
 
 
     /* Upload audio to Supabase Storage */
 
     const uploadResult =
-        await supabaseClient
+        await owSupabase()
             .storage
             .from("voice-messages")
             .upload(
                 filePath,
                 audioBlob,
                 {
-                    contentType: "audio/webm",
+                    contentType: recordedType,
                     upsert: false
                 }
             );
@@ -2034,7 +2077,7 @@ async function uploadVoiceMessage() {
         );
 
 
-    const result = await supabaseClient
+    const result = await owSupabase()
     .from("messages")
     .insert([{
         sender: sender,
@@ -2064,7 +2107,7 @@ async function uploadVoiceMessage() {
 
     function startMessagePolling() {
         stopMessagePolling();
-        messagePoll = setInterval(function () { loadMessages(false); }, 8000);
+        messagePoll = setInterval(function () { if (!document.hidden) loadMessages(false); }, 8000);
     }
     function stopMessagePolling() { clearInterval(messagePoll); messagePoll = null; }
 
@@ -2075,9 +2118,13 @@ async function uploadVoiceMessage() {
    SELECT MESSAGE IMAGE
 ========================================= */
 
-const imageMessageInput = $("imageMessageInput");
+let imageMessageInput = null;
 
-if (imageMessageInput) {
+function wireMessageImageInput() {
+
+    imageMessageInput = $("imageMessageInput");
+
+    if (!imageMessageInput) return;
 
     imageMessageInput.addEventListener("change", function () {
 
@@ -2125,7 +2172,20 @@ if (imageMessageInput) {
    SEND TEXT OR IMAGE MESSAGE
 ========================================= */
 
+let sendingMessage = false;
+
 async function sendMessage() {
+
+    if (sendingMessage) return;
+
+    sendingMessage = true;
+
+    try { await sendMessageInner(); }
+
+    finally { sendingMessage = false; }
+}
+
+async function sendMessageInner() {
 
     const input = $("messageInput");
 
@@ -2170,7 +2230,7 @@ async function sendMessage() {
 
 
         const uploadResult =
-            await supabaseClient
+            await owSupabase()
                 .storage
                 .from("message-images")
                 .upload(
@@ -2197,7 +2257,7 @@ async function sendMessage() {
 
 
         const result =
-            await supabaseClient
+            await owSupabase()
                 .from("messages")
                 .insert([{
 
@@ -2253,7 +2313,7 @@ async function sendMessage() {
     ===================================== */
 
     const result =
-        await supabaseClient
+        await owSupabase()
             .from("messages")
             .insert([{
 
@@ -2281,14 +2341,116 @@ async function sendMessage() {
     await loadMessages(true);
 }
 
+    /* ---------- delete-message popup ---------- */
+    function askDeleteMessage() {
+        return new Promise(function (resolve) {
+            const ov = document.createElement("div");
+            ov.className = "delete-message-overlay";
+            ov.innerHTML = '<div class="delete-message-modal" role="dialog" aria-modal="true">' +
+                '<div class="clear-notifications-emoji">🗑️</div>' +
+                '<div class="delete-message-text"></div>' +
+                '<div class="delete-message-buttons">' +
+                '<button type="button" class="delete-confirm-button"></button>' +
+                '<button type="button" class="delete-cancel-button"></button></div></div>';
+            ov.querySelector(".delete-message-text").textContent = t("msg.del.q");
+            ov.querySelector(".delete-confirm-button").textContent = t("msg.del.yes");
+            ov.querySelector(".delete-cancel-button").textContent = t("msg.del.no");
+            let done = false;
+            function close(v) {
+                if (done) return;
+                done = true;
+                document.removeEventListener("keydown", onKey);
+                ov.classList.add("closing");
+                setTimeout(function () { ov.remove(); }, 180);
+                resolve(v);
+            }
+            function onKey(e) { if (e.key === "Escape") close(false); }
+            ov.querySelector(".delete-confirm-button").onclick = function () { close(true); };
+            ov.querySelector(".delete-cancel-button").onclick = function () { close(false); };
+            ov.addEventListener("click", function (e) { if (e.target === ov) close(false); });
+            document.addEventListener("keydown", onKey);
+            document.body.appendChild(ov);
+        });
+    }
+
+    /* ---------- message reactions (table: message_reactions) ---------- */
+    const REACTION_EMOJIS = ["❤️", "😂", "😭", "😮", "👍", "🔥", "🥹", "😡"];
+    let reactState = {}, reactPicker = null;
+
+    async function fetchReactions() {
+        try {
+            const r = await owSupabase().from("message_reactions").select("message_id, user_id, emoji");
+            if (r.error) { console.warn("Reactions table not ready:", r.error.message); return {}; }
+            const map = {};
+            (r.data || []).forEach(function (x) { (map[String(x.message_id)] = map[String(x.message_id)] || []).push(x); });
+            return map;
+        } catch (e) { return {}; }
+    }
+
+    function closeReactPicker() { if (reactPicker) { reactPicker.remove(); reactPicker = null; } }
+    document.addEventListener("click", closeReactPicker);
+
+    function openReactPicker(anchor, item) {
+        closeReactPicker();
+        const box = document.createElement("div");
+        box.className = "react-picker";
+        REACTION_EMOJIS.forEach(function (em) {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.textContent = em;
+            b.onclick = function (e) { e.stopPropagation(); closeReactPicker(); setReaction(item, em); };
+            box.appendChild(b);
+        });
+        anchor.parentNode.appendChild(box);
+        const listEl = $("messagesList");
+        if (listEl && anchor.getBoundingClientRect().top - listEl.getBoundingClientRect().top < 80) box.classList.add("down");
+        reactPicker = box;
+    }
+
+    async function setReaction(item, emoji) {
+        const user = currentUser || await getCurrentUser();
+        if (!user || item.id === undefined) return;
+        const key = String(item.id);
+        const mine = (reactState[key] || []).filter(function (x) { return x.user_id === user.id; })[0];
+        let res;
+        if (mine && mine.emoji === emoji) {
+            res = await owSupabase().from("message_reactions").delete().eq("message_id", key).eq("user_id", user.id);
+        } else {
+            res = await owSupabase().from("message_reactions").upsert({ message_id: key, user_id: user.id, emoji: emoji }, { onConflict: "message_id,user_id" });
+        }
+        if (res.error) { console.error(res.error); toast(t("msg.react.fail")); return; }
+        loadMessages(false);
+    }
+
+    function renderReactionPills(item, list, myId) {
+        const wrap = document.createElement("span");
+        wrap.className = "msg-reacts";
+        const groups = {};
+        list.forEach(function (x) {
+            const g = groups[x.emoji] = groups[x.emoji] || { n: 0, mine: false };
+            g.n++;
+            if (x.user_id === myId) g.mine = true;
+        });
+        Object.keys(groups).forEach(function (em) {
+            const p = document.createElement("button");
+            p.type = "button";
+            p.className = "react-pill" + (groups[em].mine ? " mine" : "");
+            p.textContent = em + (groups[em].n > 1 ? " " + groups[em].n : "");
+            p.onclick = function (e) { e.stopPropagation(); setReaction(item, em); };
+            wrap.appendChild(p);
+        });
+        return wrap;
+    }
+
     async function loadMessages(scrollDown) {
+        const reqId = ++messagesReq;
         const list = $("messagesList");
-        if (!list || !supabaseClient) return;
+        if (!list || !owSupabase()) return;
 
         const user = currentUser || await getCurrentUser();
         if (!user) { list.innerHTML = '<div class="empty-state"></div>'; list.firstChild.textContent = t("msg.login"); return; }
 
-        const result = await supabaseClient.from("messages").select("*").order("created_at", { ascending: true });
+        const result = await owSupabase().from("messages").select("*").order("created_at", { ascending: true });
         if (result.error) {
             console.error(result.error);
             list.innerHTML = '<div class="empty-state"></div>';
@@ -2297,7 +2459,17 @@ async function sendMessage() {
         }
 
         const data = result.data || [];
+        const reactMap = await fetchReactions();
+        reactState = reactMap;
         if (window.noticeMessages) window.noticeMessages(data, cfg.name || (user.email ? user.email.split("@")[0] : ""));
+
+        // an older request that finished after a newer one must not overwrite it
+        if (reqId !== messagesReq) return;
+        // nothing changed since the last refresh: keep the list as it is (voice messages keep playing)
+        const sig = JSON.stringify([cfg.name || (user.email ? user.email.split("@")[0] : ""), cfg.language,
+            data.map(function (m) { return [m.id, m.message, m.message_type, m.audio_url, m.image_url]; }), reactMap]);
+        if (!scrollDown && sig === lastMessagesSig && list.childElementCount) return;
+        lastMessagesSig = sig;
         const nearBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 80;
         list.innerHTML = "";
 
@@ -2342,7 +2514,7 @@ async function sendMessage() {
 
         if (!audio.src) {
 
-            const { data, error } = await supabaseClient
+            const { data, error } = await owSupabase()
                 .storage
                 .from("voice-messages")
                 .createSignedUrl(item.audio_url, 3600);
@@ -2357,15 +2529,24 @@ async function sendMessage() {
         }
 
         if (audio.paused) {
-            await audio.play();
-            playButton.textContent = "⏸";
+            document.querySelectorAll(".voice-message audio").forEach(function (other) { if (other !== audio) other.pause(); });
+            try {
+                await audio.play();
+                playButton.textContent = "⏸";
+            } catch (e) {
+                console.error("Voice playback error:", e);
+                playButton.textContent = "▶";
+                alert("Could not play the voice message.");
+            }
         } else {
             audio.pause();
-            playButton.textContent = "▶";
         }
     });
 
     audio.addEventListener("ended", function () {
+        playButton.textContent = "▶";
+    });
+    audio.addEventListener("pause", function () {
         playButton.textContent = "▶";
     });
 
@@ -2404,19 +2585,12 @@ async function sendMessage() {
 
     bubble.append(sender, content);
 
-    const imageResult = await supabaseClient
-        .storage
-        .from("message-images")
-        .createSignedUrl(item.image_url, 3600);
-
-    if (!imageResult.error && imageResult.data) {
-
-        image.src = imageResult.data.signedUrl;
-
-        image.addEventListener("click", function () {
-            window.open(imageResult.data.signedUrl, "_blank");
-        });
-    }
+    owSupabase().storage.from("message-images").createSignedUrl(item.image_url, 3600).then(function (imageResult) {
+        if (!imageResult.error && imageResult.data) {
+            image.src = imageResult.data.signedUrl;
+            image.addEventListener("click", function () { window.open(imageResult.data.signedUrl, "_blank"); });
+        }
+    });
 
 } else {
 
@@ -2432,12 +2606,25 @@ async function sendMessage() {
                 time.textContent = new Date(item.created_at).toLocaleTimeString(locale(), { hour: "2-digit", minute: "2-digit" });
                 bubble.appendChild(time);
             }
+            if (item.id !== undefined) {
+                const foot = document.createElement("div");
+                foot.className = "msg-foot";
+                const add = document.createElement("button");
+                add.type = "button";
+                add.className = "msg-react";
+                add.textContent = "☺";
+                add.setAttribute("aria-label", "React");
+                add.onclick = function (e) { e.stopPropagation(); openReactPicker(add, item); };
+                foot.append(renderReactionPills(item, reactMap[String(item.id)] || [], user.id), add);
+                bubble.appendChild(foot);
+            }
             if (item.sender === myName && item.id !== undefined) {
                 const del = document.createElement("button"); del.type = "button"; del.className = "msg-del"; del.textContent = "🗑️";
                 del.onclick = async function () {
-                    if (!confirm(t("msg.confirmDelete"))) return;
-                    const r = await supabaseClient.from("messages").delete().eq("id", item.id);
+                    if (!(await askDeleteMessage())) return;
+                    const r = await owSupabase().from("messages").delete().eq("id", item.id);
                     if (r.error) { console.error(r.error); alert("Could not delete (check Supabase delete policy)."); return; }
+                    owSupabase().from("message_reactions").delete().eq("message_id", String(item.id)).then(function () {}, function () {});
                     loadMessages(false);
                 };
                 bubble.appendChild(del);
@@ -2452,15 +2639,38 @@ async function sendMessage() {
        13. QUIZ
     ================================================= */
 
-    let currentQuestion = 0, quizAnswers = [], quizScore = 0;
+    let currentQuestion = 0, quizAnswers = [], quizScore = 0, quizLevel = 0;
+    const TOTAL_LEVELS = 10;
 
-    function normalizeQuizAnswer(answer) {
-        return typeof answer === "string" ? answer.toLowerCase().trim().replace(/\s+/g, " ").replace(/[.,!?]/g, "") : "";
+    // level 0 = the original quiz; levels 1..9 come from quiz-levels.js
+    function levelQuestions(level) {
+        if (level === 0) return quizLevel1;
+        const L = window.QUIZ_LEVELS && window.QUIZ_LEVELS[level];
+        if (!L || !L.length) return quizLevel1;
+        return L.map(function (q) { return { question: q[0], options: q[1], answers: q[2] }; });
+    }
+    function optionsForCurrent() {
+        if (quizLevel === 0) return QUIZ_OPTIONS[currentQuestion] || [];
+        const q = quizQuestions[currentQuestion];
+        return (q && q.options) || [];
     }
 
-    function isQuizAnswerCorrect(userAnswer, accepted) {
+    function normalizeQuizAnswer(answer) {
+        return typeof answer === "string"
+            ? answer.toLowerCase().trim().replace(/[\u064B-\u065F\u0640]/g, "").replace(/['\u2019`]/g, "").replace(/[.,!?;:\u060C\u061F\u061B]/g, " ").replace(/\s+/g, " ").trim()
+            : "";
+    }
+
+    // loose = true  ->  also accept a longer answer that CONTAINS an accepted answer as whole word(s)
+    function isQuizAnswerCorrect(userAnswer, accepted, loose) {
         const value = normalizeQuizAnswer(userAnswer);
-        return !!value && accepted.some(function (a) { return normalizeQuizAnswer(a) === value; });
+        if (!value || !accepted) return false;
+        return accepted.some(function (a) {
+            const n = normalizeQuizAnswer(a);
+            if (!n) return false;
+            if (n === value) return true;
+            return !!loose && (" " + value + " ").indexOf(" " + n + " ") !== -1;
+        });
     }
 
     const QUIZ_OPTIONS = [
@@ -2474,6 +2684,15 @@ async function sendMessage() {
         ["Playing games", "Talking to Darvan", "Reading", "Drawing"],
         ["Dark water", "Losing Darvan", "Heights", "Spiders"]
     ];
+    function shuffled(list) {
+        const a = list.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+        }
+        return a;
+    }
+
     function renderQuizOptions() {
         const box = $("quizOptions"), single = $("answerInput");
         if (!box) return;
@@ -2481,7 +2700,7 @@ async function sendMessage() {
         hide(single);
         const other = document.createElement("button");
         const mark = function (btn) { box.querySelectorAll(".quiz-opt").forEach(function (b) { b.classList.remove("sel"); }); if (btn) btn.classList.add("sel"); };
-        (QUIZ_OPTIONS[currentQuestion] || []).slice().sort(function () { return Math.random() - 0.5; }).forEach(function (o) {
+        shuffled(optionsForCurrent()).forEach(function (o) {
             const b = document.createElement("button"); b.type = "button"; b.className = "quiz-opt"; b.textContent = o;
             b.onclick = function () { mark(b); single.value = o; hide(single); };
             box.appendChild(b);
@@ -2491,7 +2710,9 @@ async function sendMessage() {
         box.appendChild(other);
     }
 
-    function startQuiz() {
+    function startQuiz(level) {
+        quizLevel = typeof level === "number" ? clamp(level, 0, TOTAL_LEVELS - 1) : 0;
+        quizQuestions = levelQuestions(quizLevel);
         currentQuestion = 0;
         quizAnswers = [];
         quizScore = 0;
@@ -2501,7 +2722,7 @@ async function sendMessage() {
     }
 
     function updateQuestionLabels() {
-        $("questionNumber").textContent = t("quiz.q") + " " + (currentQuestion + 1) + " / " + quizQuestions.length;
+        $("questionNumber").textContent = t("quiz.level") + " " + (quizLevel + 1) + " · " + t("quiz.q") + " " + (currentQuestion + 1) + " / " + quizQuestions.length;
         $("quizBar").style.width = (currentQuestion / quizQuestions.length * 100) + "%";
     }
 
@@ -2556,8 +2777,8 @@ async function sendMessage() {
     function lastQuestionReaction(raw) {
         const answer = raw.trim().toLowerCase();
         if (!answer) return "";
-        const bad = ["the way you complain", "your boobs", "your ass", "your body", "your english", "funny"];
-        const good = ["personality", "music taste", "you cant hide your feelings", "you can't hide your feelings", "beautiful", "cute", "smart", "the way you laugh", "your eyes", "special", "your hair"];
+        const bad = ["the way you complain", "your boobs", "your ass", "your body", "your english"];
+        const good = ["personality", "music taste", "you cant hide your feelings", "you can't hide your feelings", "beautiful", "cute", "smart", "the way you laugh", "your eyes", "special", "your hair", "love", "care", "kind", "sweet", "smile", "voice", "forever", "always", "أحبك", "احبك", "شخصية", "جميلة", "مميزة"];
         if (bad.some(function (w) { return answer.includes(w); })) return t("quiz.r.bad");
         if (good.some(function (w) { return answer.includes(w); })) return t("quiz.r.good");
         return t("quiz.r.meh");
@@ -2572,7 +2793,7 @@ async function sendMessage() {
                 .map(function (i) { return i.value.trim(); }).filter(Boolean);
             if (!answers.length) { alert(t("quiz.need")); return; }
             quizAnswers.push(answers.join(" | "));
-            if (answers.some(function (a) { return isQuizAnswerCorrect(a, question.answers); })) quizScore++;
+            if (answers.some(function (a) { return isQuizAnswerCorrect(a, question.answers, quizLevel > 0); })) quizScore++;
             finishQuiz();
             return;
         }
@@ -2594,6 +2815,11 @@ async function sendMessage() {
         $("quizResult").textContent = t("quiz.result").replace("{n}", quizScore).replace("{total}", total).replace("{p}", percentage);
         const level = percentage < 20 ? 0 : percentage < 50 ? 1 : percentage < 70 ? 2 : percentage < 80 ? 3 : percentage < 100 ? 4 : 5;
         $("quizMessage").textContent = t("quiz.m" + level);
+        const nextData = window.QUIZ_LEVELS && window.QUIZ_LEVELS[quizLevel + 1];
+        const hasNext = quizLevel < TOTAL_LEVELS - 1 && !!(nextData && nextData.length);
+        if ($("quizLevelDone")) $("quizLevelDone").textContent = hasNext ? t("quiz.level.done").replace("{l}", quizLevel + 1) : t("quiz.all.done");
+        const nb = $("nextLevelButton");
+        if (nb) nb.classList.toggle("hidden", !hasNext);
     }
 
 
@@ -2653,6 +2879,7 @@ async function sendMessage() {
         });
     }
 
+    let currentAlbumName = "";
     const GALLERY_IDS = { elegant: "elegantGallery", polaroid: "polaroidGallery", masonry: "masonryGallery", featured: "featuredGallery", fullscreen: "fullscreenGallery" };
     let featuredPhotos = [], featuredIndex = 0, fullscreenPhotos = [], fullscreenIndex = 0;
 
@@ -2666,6 +2893,7 @@ async function sendMessage() {
     function showAlbum(name) {
         const album = ALBUMS[name];
         if (!album) { goHome(); return; }
+        currentAlbumName = name;
         clearAlbum();
         $("openedAlbumTitle").textContent = t("alb." + name + ".t");
         const photos = album.photos;
@@ -2748,6 +2976,64 @@ async function sendMessage() {
         if (!fullscreenPhotos.length) return;
         fullscreenIndex = (fullscreenIndex + d + fullscreenPhotos.length) % fullscreenPhotos.length;
         updateFullscreen();
+    }
+
+    /* ---------- Downloads ---------- */
+
+    function saveBlob(blob, name) {
+        const u = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = u; a.download = name;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(u); }, 5000);
+    }
+    function fileNameOf(src) {
+        let n = String(src).split("?")[0].split("/").pop() || "photo.jpeg";
+        try { n = decodeURIComponent(n); } catch (e) { /* keep */ }
+        return n;
+    }
+    async function downloadFile(url, name) {
+        try {
+            const r = await fetch(url);
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            saveBlob(await r.blob(), name || fileNameOf(url));
+        } catch (e) {
+            const a = document.createElement("a");
+            a.href = url; a.download = name || fileNameOf(url);
+            document.body.appendChild(a); a.click(); a.remove();
+        }
+    }
+    function loadJsZip() {
+        return new Promise(function (resolve, reject) {
+            if (window.JSZip) { resolve(window.JSZip); return; }
+            const s = document.createElement("script");
+            s.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+            s.onload = function () { if (window.JSZip) resolve(window.JSZip); else reject(new Error("zip missing")); };
+            s.onerror = function () { reject(new Error("zip load failed")); };
+            document.head.appendChild(s);
+        });
+    }
+    async function downloadAlbum() {
+        const album = ALBUMS[currentAlbumName];
+        if (!album) return;
+        toast(t("alb.dl.busy"));
+        try {
+            const JSZip = await loadJsZip();
+            const zip = new JSZip();
+            for (const src of album.photos) {
+                const r = await fetch(src);
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                zip.file(fileNameOf(src), await r.blob());
+            }
+            saveBlob(await zip.generateAsync({ type: "blob" }), "our-world-" + currentAlbumName + ".zip");
+        } catch (e) {
+            console.warn("Zip failed, downloading one by one:", e);
+            for (const src of album.photos) {
+                await downloadFile(src, fileNameOf(src));
+                await new Promise(function (r) { setTimeout(r, 450); });
+            }
+        }
+        toast(t("alb.dl.done"));
     }
 
     /* ---------- Large image viewer ---------- */
@@ -2854,6 +3140,8 @@ async function sendMessage() {
         sendMessage: sendMessage,
         toggleVoiceRecording: toggleVoiceRecording,
         startQuiz: startQuiz,
+        retryLevel: function () { startQuiz(quizLevel); },
+        nextLevel: function () { startQuiz(quizLevel + 1); },
         nextQuestion: nextQuestion,
         addMoreAnswer: addMoreAnswer,
 
@@ -2863,7 +3151,11 @@ async function sendMessage() {
         fsNext: function () { stepFullscreen(1); },
         closeViewer: function () { dismissOverlay("viewer"); },
         viewerPrev: function () { stepViewer(-1); },
-        viewerNext: function () { stepViewer(1); }
+        viewerNext: function () { stepViewer(1); },
+        downloadAlbum: downloadAlbum,
+        downloadViewer: function () { const s = viewerList[viewerIndex]; if (s) downloadFile(s); },
+        downloadFeatured: function () { const s = featuredPhotos[featuredIndex]; if (s) downloadFile(s); },
+        downloadFullscreen: function () { const s = fullscreenPhotos[fullscreenIndex]; if (s) downloadFile(s); }
     };
 
     document.addEventListener("click", function (e) {
@@ -2878,9 +3170,13 @@ async function sendMessage() {
     });
 
     // Tap the dark area around a big photo to close it.
-    $("imageViewer").addEventListener("click", function (e) {
-        if (e.target === e.currentTarget) dismissOverlay("viewer");
-    });
+    function wireViewerBackdrop() {
+        const viewer = $("imageViewer");
+        if (!viewer) return;
+        viewer.addEventListener("click", function (e) {
+            if (e.target === e.currentTarget) dismissOverlay("viewer");
+        });
+    }
 
     document.addEventListener("keydown", function (e) {
         const target = e.target;
@@ -2905,14 +3201,21 @@ async function sendMessage() {
         }
     });
 
-    $("loginForm").addEventListener("submit", login);
+    function wireLoginForm() {
+        const form = $("loginForm");
+        if (form) form.addEventListener("submit", login);
+    }
 
 
     /* =================================================
        17. START
     ================================================= */
 
-    document.addEventListener("DOMContentLoaded", function () {
+    onReady(function () {
+        wireMusic();
+        wireMessageImageInput();
+        wireViewerBackdrop();
+        wireLoginForm();
         loadSettings();
         loadNotes();
         initSettingsControls();
@@ -2936,37 +3239,51 @@ async function sendMessage() {
    NOTIFICATIONS PANEL
 ================================ */
 
-const notificationsButton = document.getElementById("notificationsButton");
-const notificationsPanel = document.getElementById("notificationsPanel");
-const closeNotifications = document.getElementById("closeNotifications");
-const clearNotificationsButton = document.getElementById("clearNotificationsButton");
-const clearNotificationsModal = document.getElementById("clearNotificationsModal");
-const confirmClearNotifications = document.getElementById("confirmClearNotifications");
-const cancelClearNotifications = document.getElementById("cancelClearNotifications");
+(function wireNotificationsPanel() {
+    function wire() {
+        const notificationsButton = document.getElementById("notificationsButton");
+        const notificationsPanel = document.getElementById("notificationsPanel");
+        const closeNotifications = document.getElementById("closeNotifications");
+        const clearNotificationsButton = document.getElementById("clearNotificationsButton");
+        const clearNotificationsModal = document.getElementById("clearNotificationsModal");
+        const confirmClearNotifications = document.getElementById("confirmClearNotifications");
+        const cancelClearNotifications = document.getElementById("cancelClearNotifications");
 
-if (clearNotificationsButton && clearNotificationsModal) {
-    clearNotificationsButton.addEventListener("click", function () {
-        clearNotificationsModal.classList.remove("hidden");
-    });
-}
-
-if (cancelClearNotifications && clearNotificationsModal) {
-    cancelClearNotifications.addEventListener("click", function () {
-        clearNotificationsModal.classList.add("hidden");
-    });
-}
-
-if (confirmClearNotifications && clearNotificationsModal) {
-    confirmClearNotifications.addEventListener("click", clearAllNotifications);
-}
+        if (clearNotificationsButton && clearNotificationsModal) {
+            clearNotificationsButton.addEventListener("click", function () {
+                clearNotificationsModal.classList.remove("hidden");
+            });
+        }
+        if (cancelClearNotifications && clearNotificationsModal) {
+            cancelClearNotifications.addEventListener("click", function () {
+                clearNotificationsModal.classList.add("hidden");
+            });
+        }
+        if (confirmClearNotifications && clearNotificationsModal) {
+            confirmClearNotifications.addEventListener("click", clearAllNotifications);
+        }
+        if (notificationsButton && notificationsPanel) {
+            notificationsButton.addEventListener("click", function () {
+                notificationsPanel.classList.toggle("hidden");
+            });
+        }
+        if (closeNotifications && notificationsPanel) {
+            closeNotifications.addEventListener("click", function () {
+                notificationsPanel.classList.add("hidden");
+            });
+        }
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wire);
+    else wire();
+})();
 
 async function clearAllNotifications() {
     try { localStorage.removeItem("ourWorldNotices"); } catch (e) {}
 
     try {
         const user = await getCurrentUser();
-        if (user) {
-            const { error } = await supabaseClient
+        if (user && owSupabase()) {
+            const { error } = await owSupabase()
                 .from("notifications")
                 .delete()
                 .eq("user_id", user.id);
@@ -2976,20 +3293,9 @@ async function clearAllNotifications() {
         console.error("Error clearing notifications:", e);
     }
 
-    if (clearNotificationsModal) clearNotificationsModal.classList.add("hidden");
+    const modal = document.getElementById("clearNotificationsModal");
+    if (modal) modal.classList.add("hidden");
     await loadNotifications();
-}
-
-if (notificationsButton && notificationsPanel) {
-    notificationsButton.addEventListener("click", function () {
-        notificationsPanel.classList.toggle("hidden");
-    });
-}
-
-if (closeNotifications && notificationsPanel) {
-    closeNotifications.addEventListener("click", function () {
-        notificationsPanel.classList.add("hidden");
-    });
 }
 
 /* ================================
@@ -2998,9 +3304,9 @@ if (closeNotifications && notificationsPanel) {
 ================================ */
 
 async function getCurrentUser() {
-    if (!supabaseClient) return null;
+    if (!owSupabase()) return null;
 
-    const result = await supabaseClient.auth.getUser();
+    const result = await owSupabase().auth.getUser();
 
     if (result.error || !result.data || !result.data.user) return null;
 
@@ -3016,7 +3322,7 @@ async function loadNotifications() {
     try {
         const user = await getCurrentUser();
         if (!user) return;
-        const result = await supabaseClient
+        const result = await owSupabase()
             .from("notifications")
             .select("*")
             .eq("user_id", user.id)

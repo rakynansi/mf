@@ -590,7 +590,11 @@
             <h2 data-i18n="quiz.done">Quiz finished! 💕</h2>
             <div id="quizResult" class="quiz-result"></div>
             <p id="quizMessage" class="quiz-message"></p>
-            <button type="button" class="primary-btn" data-action="startQuiz" data-i18n="quiz.again">Play again 💕</button>
+            <p id="quizLevelDone" class="quiz-level-done"></p>
+            <div class="quiz-finish-actions">
+                <button type="button" id="nextLevelButton" class="primary-btn" data-action="nextLevel" data-i18n="quiz.next.level">Next level 🚀</button>
+                <button type="button" class="ghost-btn" data-action="retryLevel" data-i18n="quiz.again">Retry this level 🔁</button>
+            </div>
         </div>
     </section>
 
@@ -622,6 +626,9 @@
         <header class="view-head">
             <h2 id="openedAlbumTitle"></h2>
         </header>
+        <div class="album-actions">
+            <button type="button" class="primary-btn small" data-action="downloadAlbum" data-i18n="alb.dl.all">⬇️ Download album</button>
+        </div>
 
         <div id="elegantGallery"  class="album-design elegant hidden"></div>
         <div id="polaroidGallery" class="album-design polaroid hidden"></div>
@@ -635,10 +642,12 @@
             </div>
             <div id="featuredThumbnails" class="featured-thumbs"></div>
             <div id="featuredCounter" class="counter-pill"></div>
+            <button type="button" class="ghost-btn small gallery-dl" data-action="downloadFeatured" data-i18n="alb.dl.one">⬇️ Download photo</button>
         </div>
 
         <div id="fullscreenGallery" class="album-design fullscreen hidden">
             <button type="button" class="fs-close" data-action="back" aria-label="Close">✕</button>
+            <button type="button" class="fs-dl" data-action="downloadFullscreen" aria-label="Download">⬇️</button>
             <button type="button" class="fs-arrow prev" data-action="fsPrev" aria-label="Previous">‹</button>
             <img id="fullscreenImage" src="" alt="Photo">
             <button type="button" class="fs-arrow next" data-action="fsNext" aria-label="Next">›</button>
@@ -654,6 +663,7 @@
 ====================================================== -->
 <div id="imageViewer" class="viewer" aria-hidden="true">
     <button type="button" class="viewer-close" data-action="closeViewer" aria-label="Close">✕</button>
+    <button type="button" class="viewer-dl" data-action="downloadViewer" aria-label="Download">⬇️</button>
     <button type="button" class="viewer-arrow prev" data-action="viewerPrev" aria-label="Previous">‹</button>
     <img id="imageViewerImage" src="" alt="Large photo">
     <button type="button" class="viewer-arrow next" data-action="viewerNext" aria-label="Next">›</button>
@@ -696,6 +706,7 @@
         console.error("Supabase could not be loaded:", error);
     }
 </script>
+<script src="quiz-levels.js"></script>
 <script src="script.js"></script>
 <script src="extras.js"></script>
 

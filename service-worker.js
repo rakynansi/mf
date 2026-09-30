@@ -14,10 +14,10 @@ self.addEventListener("push", event => {
 
     const options = {
         body: data.body || "You received a new message",
-        icon: data.icon || "/icon.png",
-        badge: data.badge || "/icon.png",
+        icon: data.icon || "icon.png",
+        badge: data.badge || "icon.png",
         data: {
-            url: data.url || "/"
+            url: data.url || self.registration.scope
         }
     };
 
@@ -30,7 +30,7 @@ self.addEventListener("push", event => {
 self.addEventListener("notificationclick", event => {
     event.notification.close();
 
-    const url = event.notification.data?.url || "/";
+    const url = (event.notification.data && event.notification.data.url) || self.registration.scope;
 
     event.waitUntil(
         clients.openWindow(url)

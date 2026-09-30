@@ -192,4 +192,21 @@
     setF(); $("mainPage").appendChild(f);
     new MutationObserver(setF).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
   })();
+  /* ---------- diagnostics: which photos / songs are missing on the live site? ----------
+     Open your site with  #check  at the end (example: https://you.github.io/site/#check)
+     or run  checkFiles()  in the browser console. */
+  window.checkFiles = async function () {
+    var f = window.OW_FILES || { music: [], images: [] }, all = f.images.concat(f.music), missing = [];
+    for (var i = 0; i < all.length; i++) {
+      try {
+        var r = await fetch(all[i], { method: "HEAD", cache: "no-store" });
+        if (!r.ok) missing.push(all[i] + "  (" + r.status + ")");
+      } catch (e) { missing.push(all[i] + "  (network)"); }
+    }
+    console.log(missing.length ? "Missing files:\n" + missing.join("\n") : "All " + all.length + " files were found");
+    return missing;
+  };
+  if (/#check/.test(location.hash)) window.addEventListener("load", function () {
+    window.checkFiles().then(function (m) { alert(m.length ? "Missing files (" + m.length + "):\n" + m.join("\n") : "All files found ✅"); });
+  });
 })();
