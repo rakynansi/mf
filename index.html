@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="images/favicon.png">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="stylesheet" href="extras.css?v=3">
 </head>
 
@@ -566,6 +566,10 @@
          QUIZ
     ================================================== -->
     <section id="quiz" class="view hidden">
+        <div class="quiz-deco" aria-hidden="true">
+            <span>💗</span><span>✨</span><span>🌸</span><span>💕</span><span>⭐</span><span>🦋</span>
+            <span>💖</span><span>✨</span><span>🌷</span><span>💗</span><span>🫧</span><span>💕</span>
+        </div>
         <button type="button" class="back-button" data-action="back"><span class="arrow">‹</span> <span data-i18n="back">Back</span></button>
 
         <div id="quizContainer" class="quiz-card">
@@ -574,6 +578,7 @@
                 <p id="questionNumber"></p>
             </header>
 
+            <div id="quizLevels" class="quiz-levels" aria-hidden="true"></div>
             <div class="quiz-progress"><i id="quizBar"></i></div>
 
             <h3 id="questionText"></h3>
@@ -597,7 +602,14 @@
             <div class="quiz-finish-actions">
                 <button type="button" id="nextLevelButton" class="primary-btn" data-action="nextLevel" data-i18n="quiz.next.level">Next level 🚀</button>
                 <button type="button" class="ghost-btn" data-action="retryLevel" data-i18n="quiz.again">Retry this level 🔁</button>
+                <button type="button" id="reviewButton" class="primary-btn hidden" data-action="openReview" data-i18n="quiz.review">Review my answers 🔍</button>
             </div>
+        </div>
+
+        <div id="quizReview" class="quiz-card quiz-review hidden">
+            <button type="button" class="ghost-btn" data-action="closeReview" data-i18n="quiz.review.back">‹ Back to results</button>
+            <h2 data-i18n="quiz.review.title">All your answers 💗</h2>
+            <div id="quizReviewBody"></div>
         </div>
     </section>
 
@@ -709,7 +721,7 @@
         console.error("Supabase could not be loaded:", error);
     }
 </script>
-<script src="quiz-levels.js?v=3"></script>
+<script src="quiz-levels.js?v=4"></script>
 <script src="script.js?v=4"></script>
 <script src="extras.js?v=3"></script>
 

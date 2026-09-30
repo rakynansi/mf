@@ -26,41 +26,41 @@ function owSupabase() {
     //  2) change only the text inside  name: "..."  to the real song name
     //  To add a song: copy one line and change the file name.
     // =====================================================
-    const MUSIC_TRACKS = [
-    { name: "• L’Art Du Savoir • (Slowed)", file: "music1.mp3" },
-    { name: "505", file: "music2.mp3" },
-    { name: "Ecstacy", file: "music3.mp3" },
-    { name: "Headlock", file: "music4.mp3" },
-    { name: "Wael Kfoury - Layel W Raad _ وائل كفوري - ليل و رعد", file: "music5.mp3" },
-    { name: "I love you so", file: "music6.mp3" },
-    { name: "I'll Keep You Safe", file: "music7.mp3" },
-    { name: "Meen Ysadak", file: "music8.mp3" },
-    { name: "Not Allowed", file: "music9.mp3" },
-    { name: "Ragebait", file: "music10.mp3" },
-    { name: "schnuffel - bunny party (slowed + reverb)", file: "music11.mp3" },
-    { name: "Self Aware", file: "music12.mp3" },
-    { name: "Me and you", file: "music13.mp3" },
-    { name: "The Perfect Girl", file: "music14.mp3" },
-    { name: "Those Eyes", file: "music15.mp3" }
-];
+   const MUSIC_TRACKS = [
+        { name: "• L’Art Du Savoir • (Slowed)", file: "music/music1.mp3" },
+        { name: "505", file: "music/music2.mp3" },
+        { name: "Ecstacy", file: "music/music3.mp3" },
+        { name: "Headlock", file: "music/music4.mp3" },
+        { name: "Wael Kfoury - Layel W Raad _ وائل كفوري - ليل و رعد", file: "music/music5.mp3" },
+        { name: "I love you so", file: "./music/music6.mp3" },
+        { name: "I'll Keep You Safe", file: "music/music7.mp3" },
+        { name: "Meen Ysadak", file: "music/music8.mp3" },
+        { name: "Not Allowed", file: "music/music9.mp3" },
+        { name: "Ragebait", file: "music/music10.mp3" },
+        { name: "schnuffel - bunny party (slowed + reverb)", file: "music/music11.mp3" },
+        { name: "Self Aware", file: "music/music12.mp3" },
+        { name: "Me and you", file: "music/music13.mp3" },
+        { name: "The Perfect Girl", file: "music/music14.mp3" },
+        { name: "Those Eyes", file: "music/music15.mp3" }
+       
+    ];
 
-function imgs(prefix, count) {
+  function imgs(prefix, count) {
     const list = [];
 
     for (let i = 1; i <= count; i++) {
-        list.push(prefix + i + ".jpeg");
+        list.push("images/" + prefix + i + ".jpeg");
     }
 
     return list;
 }
-
-const ALBUMS = {
-    nails:   { design: "elegant",    cover: "nails3.jpeg",   photos: imgs("nails", 6) },
-    normal:  { design: "polaroid",   cover: "normal3.jpeg",  photos: imgs("photo", 3).concat(imgs("normal", 7)) },
-    legs:    { design: "masonry",    cover: "legs3.jpeg",    photos: imgs("legs", 5) },
-    private: { design: "featured",   cover: "private3.jpeg", photos: imgs("private", 7), password: "5002" },
-    secret:  { design: "fullscreen", cover: "secret4.png",  photos: imgs("secret", 15),  password: "4002" }
-};
+    const ALBUMS = {
+        nails:   { design: "elegant",    cover: "images/nails3.jpeg",   photos: imgs("nails", 6) },
+        normal:  { design: "polaroid",   cover: "images/normal3.jpeg",  photos: imgs("photo", 3).concat(imgs("normal", 7)) },
+        legs:    { design: "masonry",    cover: "images/legs3.jpeg",    photos: imgs("legs", 5) },
+        private: { design: "featured",   cover: "images/private3.jpeg", photos: imgs("private", 7), password: "5002" },
+        secret:  { design: "fullscreen", cover: "images/secret4.png",  photos: imgs("secret", 15),  password: "4002" }
+    };
 
     // Used by extras.js -> checkFiles() to find photos / songs missing on the live site
     window.OW_FILES = {
@@ -286,6 +286,15 @@ const ALBUMS = {
         "quiz.m3": ["owwww noiiiice 🥹💕", "أووووه حلو 🥹💕"],
         "quiz.m4": ["youuu areee myyy loooveee 💕🥹", "أنتتت حبييييي 💕🥹"],
         "quiz.m5": ["I love you so much 🥹💕💗", "أحبك كثيرًا 🥹💕💗"],
+        "quiz.review": ["Review my answers 🔍", "مراجعة أجوبتي 🔍"],
+        "quiz.review.title": ["All your answers 💗", "كل أجوبتك 💗"],
+        "quiz.review.you": ["You answered", "جوابك"],
+        "quiz.review.right": ["Correct answer", "الجواب الصحيح"],
+        "quiz.review.any": ["Any answer was right 💕", "أي جواب كان صحيحًا 💕"],
+        "quiz.review.add": ["(typed answer)", "(جواب مكتوب)"],
+        "quiz.review.none": ["no answer", "بدون جواب"],
+        "quiz.review.back": ["‹ Back to results", "‹ العودة للنتيجة"],
+        "quiz.review.score": ["{n} / {total} correct", "{n} / {total} صحيحة"],
         "quiz.r.bad": ["fuck you 😭", "أكرهك 😭"],
         "quiz.r.good": ["owwww thank you thank you 🥹💕", "أووووه شكرًا شكرًا 🥹💕"],
         "quiz.r.meh": ["i love you 💗💕", "أنا أحبك💗💕"],
@@ -369,7 +378,7 @@ const ALBUMS = {
         del: function (key) { try { localStorage.removeItem(key); } catch (e) { /* ignore */ } }
     };
 
-    const KEY = { settings: "ourWorldSettings", bg: "ourWorldBackgroundImage", pic: "profilePicture", notes: "ourWorldNotes", quiz: "ourWorldQuizAnswers" };
+    const KEY = { settings: "ourWorldSettings", bg: "ourWorldBackgroundImage", pic: "profilePicture", notes: "ourWorldNotes", quiz: "ourWorldQuizAnswers", quizHistory: "ourWorldQuizHistory" };
 
     let toastTimer = null;
     function toast(message) {
@@ -2643,6 +2652,10 @@ async function sendMessageInner() {
     ================================================= */
 
     let currentQuestion = 0, quizAnswers = [], quizScore = 0, quizLevel = 0;
+    let quizTyped = false;          // did he type the answer ("Other answer") or tap an option?
+    let currentHistory = [];        // review data of the level being played
+    let quizHistory = {};           // review data of all finished levels
+    try { quizHistory = JSON.parse(store.get(KEY.quizHistory, "{}")) || {}; } catch (e) { quizHistory = {}; }
     const TOTAL_LEVELS = 10;
 
     // level 0 = the original quiz; levels 1..9 come from quiz-levels.js
@@ -2650,7 +2663,7 @@ async function sendMessageInner() {
         if (level === 0) return quizLevel1;
         const L = window.QUIZ_LEVELS && window.QUIZ_LEVELS[level];
         if (!L || !L.length) return quizLevel1;
-        return L.map(function (q) { return { question: q[0], options: q[1], answers: q[2] }; });
+        return L.map(function (q) { return { question: q[0], options: q[1], answers: q[2], meta: q[3] || {} }; });
     }
     function optionsForCurrent() {
         if (quizLevel === 0) return QUIZ_OPTIONS[currentQuestion] || [];
@@ -2676,6 +2689,31 @@ async function sendMessageInner() {
         });
     }
 
+    // levels 2-10 rules:  meta.any = every answer is right | meta.add = he must TYPE one of these | meta.addAny = he must TYPE anything
+    function checkQuizAnswer(question, value, typed) {
+        const meta = question.meta || {};
+        if (meta.any) return !!normalizeQuizAnswer(value);
+        if (typed && meta.addAny) return !!normalizeQuizAnswer(value);
+        if (typed && meta.add && isQuizAnswerCorrect(value, meta.add)) return true;
+        return isQuizAnswerCorrect(value, question.answers);
+    }
+
+    // what we show as "the correct answer" in the review
+    function correctLabel(question, index, level) {
+        const meta = question.meta || {};
+        if (meta.any || (level === 0 && index === quizLevel1.length - 1)) return t("quiz.review.any");
+        const parts = [];
+        if (level === 0) {
+            (QUIZ_OPTIONS[index] || []).forEach(function (o) { if (isQuizAnswerCorrect(o, question.answers)) parts.push(o); });
+            if (!parts.length) parts.push(question.answers[0]);
+        } else if (question.answers && question.answers.length) {
+            parts.push(question.answers.join(" / "));
+        }
+        if (meta.add && meta.add.length) parts.push(meta.add[langIdx === 1 && meta.add[1] ? 1 : 0] + " " + t("quiz.review.add"));
+        if (meta.addAny) parts.push(t("quiz.review.add"));
+        return parts.join(" + ");
+    }
+
     const QUIZ_OPTIONS = [
         ["Green", "Pink", "Blue", "Black"],
         ["Mobile Legends", "PUBG", "Minecraft", "Genshin Impact"],
@@ -2699,17 +2737,18 @@ async function sendMessageInner() {
     function renderQuizOptions() {
         const box = $("quizOptions"), single = $("answerInput");
         if (!box) return;
+        quizTyped = false;
         box.innerHTML = "";
         hide(single);
         const other = document.createElement("button");
         const mark = function (btn) { box.querySelectorAll(".quiz-opt").forEach(function (b) { b.classList.remove("sel"); }); if (btn) btn.classList.add("sel"); };
         shuffled(optionsForCurrent()).forEach(function (o) {
             const b = document.createElement("button"); b.type = "button"; b.className = "quiz-opt"; b.textContent = o;
-            b.onclick = function () { mark(b); single.value = o; hide(single); };
+            b.onclick = function () { mark(b); single.value = o; quizTyped = false; hide(single); };
             box.appendChild(b);
         });
         other.type = "button"; other.className = "quiz-opt other"; other.textContent = t("quiz.other");
-        other.onclick = function () { mark(other); single.value = ""; show(single); single.focus(); };
+        other.onclick = function () { mark(other); single.value = ""; quizTyped = true; show(single); single.focus(); };
         box.appendChild(other);
     }
 
@@ -2719,8 +2758,10 @@ async function sendMessageInner() {
         currentQuestion = 0;
         quizAnswers = [];
         quizScore = 0;
+        currentHistory = [];
         show($("quizContainer"));
         hide($("quizFinished"));
+        hide($("quizReview"));
         showQuestion();
     }
 
@@ -2735,6 +2776,8 @@ async function sendMessageInner() {
         if (!question) return;
         $("questionText").textContent = question.question;
         updateQuestionLabels();
+        renderLevelDots();
+        animateQuizCard();
 
         const single = $("answerInput"), multi = $("answerInputsContainer"), more = $("addMoreAnswer");
         const isLast = currentQuestion === quizQuestions.length - 1;
@@ -2796,7 +2839,11 @@ async function sendMessageInner() {
                 .map(function (i) { return i.value.trim(); }).filter(Boolean);
             if (!answers.length) { alert(t("quiz.need")); return; }
             quizAnswers.push(answers.join(" | "));
-            if (answers.some(function (a) { return isQuizAnswerCorrect(a, question.answers, quizLevel > 0); })) quizScore++;
+            const okLast = quizLevel > 0
+                ? answers.some(function (a) { return checkQuizAnswer(question, a, true) || isQuizAnswerCorrect(a, question.answers, true); })
+                : answers.some(function (a) { return isQuizAnswerCorrect(a, question.answers, false); });
+            if (okLast) quizScore++;
+            currentHistory.push({ q: question.question, given: answers.join(" | "), ok: okLast, right: correctLabel(question, currentQuestion, quizLevel) });
             finishQuiz();
             return;
         }
@@ -2804,7 +2851,9 @@ async function sendMessageInner() {
         const value = $("answerInput").value.trim();
         if (!value) { alert(t("quiz.need")); return; }
         quizAnswers.push(value);
-        if (isQuizAnswerCorrect(value, question.answers)) quizScore++;
+        const ok = quizLevel > 0 ? checkQuizAnswer(question, value, quizTyped) : isQuizAnswerCorrect(value, question.answers);
+        if (ok) quizScore++;
+        currentHistory.push({ q: question.question, given: value, ok: ok, right: correctLabel(question, currentQuestion, quizLevel) });
         currentQuestion++;
         showQuestion();
     }
@@ -2823,6 +2872,91 @@ async function sendMessageInner() {
         if ($("quizLevelDone")) $("quizLevelDone").textContent = hasNext ? t("quiz.level.done").replace("{l}", quizLevel + 1) : t("quiz.all.done");
         const nb = $("nextLevelButton");
         if (nb) nb.classList.toggle("hidden", !hasNext);
+
+        quizHistory[quizLevel] = currentHistory.slice();
+        store.set(KEY.quizHistory, JSON.stringify(quizHistory));
+        const rb = $("reviewButton");
+        if (rb) rb.classList.toggle("hidden", quizLevel < TOTAL_LEVELS - 1);
+        $("quizBar").style.width = "100%";
+        if (percentage >= 50) heartBurst(quizLevel === TOTAL_LEVELS - 1 ? 46 : 22);
+    }
+
+    /* ---------- review of all answers (shown after the last level) ---------- */
+    function openReview() {
+        const box = $("quizReviewBody");
+        if (!box) return;
+        box.innerHTML = "";
+        for (let l = 0; l < TOTAL_LEVELS; l++) {
+            const list = quizHistory[l];
+            if (!list || !list.length) continue;
+            const right = list.filter(function (x) { return x.ok; }).length;
+            const sec = document.createElement("details");
+            sec.className = "review-level";
+            if (l === 0) sec.open = true;
+            const sum = document.createElement("summary");
+            sum.innerHTML = "<span>" + t("quiz.level") + " " + (l + 1) + "</span><em>" +
+                t("quiz.review.score").replace("{n}", right).replace("{total}", list.length) + "</em>";
+            sec.appendChild(sum);
+            list.forEach(function (x, i) {
+                const row = document.createElement("div");
+                row.className = "review-item " + (x.ok ? "ok" : "bad");
+                row.style.animationDelay = (i * 0.04) + "s";
+                const q = document.createElement("b"); q.textContent = (i + 1) + ". " + x.q;
+                const you = document.createElement("p");
+                you.innerHTML = t("quiz.review.you") + ": ";
+                const yv = document.createElement("span"); yv.textContent = (x.given || t("quiz.review.none")) + (x.ok ? " ✅" : " ❌");
+                you.appendChild(yv);
+                const rt = document.createElement("p");
+                rt.innerHTML = t("quiz.review.right") + ": ";
+                const rv = document.createElement("span"); rv.className = "review-right"; rv.textContent = x.right;
+                rt.appendChild(rv);
+                row.append(q, you, rt);
+                sec.appendChild(row);
+            });
+            box.appendChild(sec);
+        }
+        hide($("quizFinished"));
+        show($("quizReview"));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function closeReview() { hide($("quizReview")); show($("quizFinished")); }
+
+    /* ---------- little decorations ---------- */
+    function heartBurst(n) {
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const layer = document.createElement("div");
+        layer.className = "heart-burst";
+        layer.setAttribute("aria-hidden", "true");
+        const icons = ["💗", "💕", "✨", "🌸", "💖", "🥹", "⭐"];
+        for (let i = 0; i < n; i++) {
+            const s = document.createElement("span");
+            s.textContent = icons[Math.floor(Math.random() * icons.length)];
+            s.style.left = (Math.random() * 100) + "vw";
+            s.style.fontSize = (16 + Math.random() * 22) + "px";
+            s.style.animationDuration = (2.2 + Math.random() * 2.4) + "s";
+            s.style.animationDelay = (Math.random() * 0.9) + "s";
+            s.style.setProperty("--drift", (Math.random() * 120 - 60) + "px");
+            layer.appendChild(s);
+        }
+        document.body.appendChild(layer);
+        setTimeout(function () { layer.remove(); }, 6000);
+    }
+    function renderLevelDots() {
+        const box = $("quizLevels");
+        if (!box) return;
+        if (!box.children.length) {
+            for (let i = 0; i < TOTAL_LEVELS; i++) { const d = document.createElement("i"); d.textContent = i + 1; box.appendChild(d); }
+        }
+        Array.prototype.forEach.call(box.children, function (d, i) {
+            d.className = i < quizLevel ? "done" : i === quizLevel ? "now" : "";
+        });
+    }
+    function animateQuizCard() {
+        const card = $("quizContainer");
+        if (!card) return;
+        card.classList.remove("q-enter");
+        void card.offsetWidth;
+        card.classList.add("q-enter");
     }
 
 
@@ -3147,6 +3281,8 @@ async function sendMessageInner() {
         nextLevel: function () { startQuiz(quizLevel + 1); },
         nextQuestion: nextQuestion,
         addMoreAnswer: addMoreAnswer,
+        openReview: openReview,
+        closeReview: closeReview,
 
         featuredPrev: function () { stepFeatured(-1); },
         featuredNext: function () { stepFeatured(1); },
