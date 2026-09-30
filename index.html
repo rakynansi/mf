@@ -8,8 +8,11 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="extras.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/favicon.png">
+    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="extras.css?v=3">
 </head>
 
 <body>
@@ -647,7 +650,7 @@
 
         <div id="fullscreenGallery" class="album-design fullscreen hidden">
             <button type="button" class="fs-close" data-action="back" aria-label="Close">✕</button>
-            <button type="button" class="fs-dl" data-action="downloadFullscreen" aria-label="Download">⬇️</button>
+            <button type="button" class="fs-dl" data-action="downloadFullscreen" aria-label="Download"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19.5h14"/></svg></button>
             <button type="button" class="fs-arrow prev" data-action="fsPrev" aria-label="Previous">‹</button>
             <img id="fullscreenImage" src="" alt="Photo">
             <button type="button" class="fs-arrow next" data-action="fsNext" aria-label="Next">›</button>
@@ -663,7 +666,7 @@
 ====================================================== -->
 <div id="imageViewer" class="viewer" aria-hidden="true">
     <button type="button" class="viewer-close" data-action="closeViewer" aria-label="Close">✕</button>
-    <button type="button" class="viewer-dl" data-action="downloadViewer" aria-label="Download">⬇️</button>
+    <button type="button" class="viewer-dl" data-action="downloadViewer" aria-label="Download"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19.5h14"/></svg></button>
     <button type="button" class="viewer-arrow prev" data-action="viewerPrev" aria-label="Previous">‹</button>
     <img id="imageViewerImage" src="" alt="Large photo">
     <button type="button" class="viewer-arrow next" data-action="viewerNext" aria-label="Next">›</button>
@@ -706,9 +709,9 @@
         console.error("Supabase could not be loaded:", error);
     }
 </script>
-<script src="quiz-levels.js"></script>
-<script src="script.js"></script>
-<script src="extras.js"></script>
+<script src="quiz-levels.js?v=3"></script>
+<script src="script.js?v=3"></script>
+<script src="extras.js?v=3"></script>
 
 </body>
 </html>

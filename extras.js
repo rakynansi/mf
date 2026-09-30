@@ -75,24 +75,36 @@
   }
   document.addEventListener("pointerdown", function (e) {
     var s = document.createElement("span"); s.className = "tap-heart";
-    s.textContent = ["💗", "💖", "💕", "🩷"][Math.random() * 4 | 0];
+    s.textContent = ["💗", "💖", "💕", "💗"][Math.random() * 4 | 0];
     s.style.left = e.clientX + "px"; s.style.top = e.clientY + "px";
     document.body.appendChild(s); setTimeout(function () { s.remove(); }, 900);
   }, { passive: true });
 
   /* ---------- dates ---------- */
   var K = "ourWorldDates";
-  var BD = [
-    { id: "bd-me", m: 4, d: 4, title: ["My birthday", "عيد ميلادي"], fx: ["🎂", "🎉", "🎈", "💗"] },
-    { id: "bd-him", m: 11, d: 16, title: ["His birthday", "عيد ميلاده"], fx: ["🎂", "🎉", "🎈", "💙"] }
-  ];
+  /* who is looking?  "rakynansi" = her (birthday 4 April); everybody else = him (16 November) */
+  var HER_NAMES = ["rakynansi"];
+  function iAmHer() {
+    var n = "";
+    try { n = String((JSON.parse(lsGet("ourWorldSettings", "{}")) || {}).name || ""); } catch (e) {}
+    return HER_NAMES.indexOf(n.trim().toLowerCase()) !== -1;
+  }
+  function birthdays() {
+    var her = { m: 4, d: 4, fx: ["🎂", "🎉", "🎈", "💗"] }, him = { m: 11, d: 16, fx: ["🎂", "🎉", "🎈", "💙"] };
+    if (iAmHer()) return [
+      { id: "bd-me", m: her.m, d: her.d, fx: her.fx, title: ["My birthday", "عيد ميلادي"] },
+      { id: "bd-him", m: him.m, d: him.d, fx: him.fx, title: ["His birthday", "عيد ميلاده"] }];
+    return [
+      { id: "bd-me", m: him.m, d: him.d, fx: him.fx, title: ["My birthday", "عيد ميلادي"] },
+      { id: "bd-him", m: her.m, d: her.d, fx: her.fx, title: ["Her birthday", "عيد ميلادها"] }];
+  }
   function load() { try { var o = JSON.parse(lsGet(K, "{}")); o.events = o.events || []; o.msgs = o.msgs || {}; o.done = o.done || {}; return o; } catch (e) { return { events: [], msgs: {}, done: {} }; } }
   function save(o) { lsSet(K, JSON.stringify(o)); }
   function iso(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   function daysLeft(date) { return Math.round((new Date(date + "T00:00:00") - new Date(iso(new Date()) + "T00:00:00")) / 86400000); }
   function items() {
     var s = load(), now = new Date(), today = iso(now), list = [];
-    BD.forEach(function (b) {
+    birthdays().forEach(function (b) {
       var d = new Date(now.getFullYear(), b.m - 1, b.d); if (iso(d) < today) d = new Date(now.getFullYear() + 1, b.m - 1, b.d);
       list.push({ id: b.id, title: T(b.title[0], b.title[1]), date: iso(d), fx: b.fx, birthday: true, msg: s.msgs[b.id] || "" });
     });

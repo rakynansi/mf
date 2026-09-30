@@ -195,9 +195,17 @@ a.media-item b{color:inherit;text-decoration:none}
 /* ===== v5 : downloads ===== */
 .album-actions{display:flex;justify-content:center;margin:-10px 0 20px}
 .gallery-dl{display:flex;margin:14px auto 0}
-.viewer-dl,.fs-dl{position:absolute;top:18px;right:74px;width:46px;height:46px;border:none;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:20px;z-index:2}
 
 /* ===== v5 : quiz levels ===== */
 .quiz-level-done{font-weight:700;margin:4px 0 12px}
 .quiz-finish-actions{display:flex;flex-direction:column;align-items:center;gap:10px}
 .quiz-finish-actions .primary-btn{min-width:220px}
+
+/* emojis: work on old Windows too */
+body,button,input,textarea,select{font-family:var(--site-font,Arial,sans-serif),"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji"}
+/* elegant download button (top of the photo viewer) */
+.viewer-dl,.fs-dl{position:absolute;top:18px;right:74px;width:46px;height:46px;border:1px solid rgba(255,255,255,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.16);color:#fff;z-index:3;cursor:pointer;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 4px 18px rgba(0,0,0,.28);transition:transform .2s,background .2s}
+.viewer-dl:hover,.fs-dl:hover{background:rgba(255,255,255,.3);transform:translateY(-2px)}
+.viewer-dl:active,.fs-dl:active{transform:scale(.92)}
+/* private/secret album covers stay foggy */
+.album-cover img{filter:blur(16px) brightness(1.05) saturate(.85)!important;transform:scale(1.2)!important}

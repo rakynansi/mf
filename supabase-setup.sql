@@ -76,3 +76,30 @@ create policy "react_delete" on public.message_reactions for delete to authentic
 --   select id, name from public.profiles;        -- must be EXACTLY 2 rows (you + him)
 --   select * from public.friend_requests;        -- after sending: sender_id AND receiver_id filled
 -- ---------------------------------------------------------------------
+
+
+-- ---------------------------------------------------------------------
+-- 4) PUSH NOTIFICATIONS  (works when the site / app is closed)
+-- ---------------------------------------------------------------------
+create table if not exists public.push_subscriptions (
+  id         bigint generated always as identity primary key,
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  endpoint   text not null unique,
+  p256dh     text not null,
+  auth       text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.push_subscriptions enable row level security;
+drop policy if exists "ps_all_own" on public.push_subscriptions;
+create policy "ps_all_own" on public.push_subscriptions for all to authenticated
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- live messages while the site is open (Realtime)
+do $$ begin
+  alter publication supabase_realtime add table public.messages;
+exception when duplicate_object then null; end $$;
+
+-- After running this file:
+--   Database -> Webhooks -> Create:  table "messages", event "Insert",
+--   type "Supabase Edge Functions", function "send-push".
