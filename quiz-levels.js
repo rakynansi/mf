@@ -28,15 +28,15 @@
 
         /* ---------- LEVEL 2 : little preferences ---------- */
         level([
-            ["What is my favorite season?", ["Winter", "Summer", "Autumn", "Spring" ]],
-            ["What is my favorite drink?", ["Coffee", "Tea", "Orange juice", "Milkshake"]],
-            ["What time of the day do I feel most alive?", ["Late night", "Morning", "Afternoon", "Sunset"]],
-            ["What kind of weather do I love?", ["Rainy", "Snowy", "Sunny", "Cloudy"]],
-            ["Cats or dogs?", ["Cats", "Dogs", "Both", "Neither"]],
-            ["What is my favorite dessert?", ["Chocolate cake", "Ice cream", "Cheesecake", "Pancakes"]],
-            ["Which language do I most want to learn?", ["German", "Japanese", "French", "Korean"]],
-            ["What kind of movies do I like the most?", ["Romance", "Horror", "Anime", "Comedy"]],
-            ["What do I do when I'm upset?", ["Stay silent", "Cry", "Play games", "Sleep"]],
+            ["What is my favorite season?", ["Winter", "Summer", "Autumn", ["Spring"] ]],
+            ["What is my favorite drink?", ["Coffee", ["Tea", "Orange juice", "Milkshake"]],
+            ["What time of the day do I feel most alive?", [["Late night",] "Morning", "Afternoon", "Sunset"]],
+            ["What kind of weather do I love?", [["Rainy",] "Snowy", "Sunny", "Cloudy"]],
+            ["Cats or dogs?", ["Cats", "Dogs", "Both",] "Neither"]],
+            ["What is my favorite dessert?", ["Chocolate cake", ["Ice cream",] "Cheesecake", "Pancakes"]],
+            ["Which language do I most want to learn?", [["German",] "Japanese", "French", "Korean"]],
+            ["What kind of movies do I like the most?", ["Romance", ["Horror",] "Anime", "Comedy"]],
+            ["What do I do when I'm upset?", [["Stay silent", "Cry", ["Play games",] "Sleep"]],
             ["What was the first thing you noticed about me?", null, ["personality"]]
         ]),
 
