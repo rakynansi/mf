@@ -26,24 +26,23 @@ function owSupabase() {
     //  2) change only the text inside  name: "..."  to the real song name
     //  To add a song: copy one line and change the file name.
     // =====================================================
-   const MUSIC_TRACKS = [
-        { name: "• L’Art Du Savoir • (Slowed)", file: "./music/music1.mp3" },
-        { name: "505", file: "music/music2.mp3" },
-        { name: "Ecstacy", file: "music/music3.mp3" },
-        { name: "Headlock", file: "music/music4.mp3" },
-        { name: "Wael Kfoury - Layel W Raad _ وائل كفوري - ليل و رعد", file: "music/music5.mp3" },
-        { name: "I love you so", file: "music/music6.mp3" },
-        { name: "I'll Keep You Safe", file: "music/music7.mp3" },
-        { name: "Meen Ysadak", file: "music/music8.mp3" },
-        { name: "Not Allowed", file: "music/music9.mp3" },
-        { name: "Ragebait", file: "music/music10.mp3" },
-        { name: "schnuffel - bunny party (slowed + reverb)", file: "music/music11.mp3" },
-        { name: "Self Aware", file: "music/music12.mp3" },
-        { name: "Me and you", file: "music/music13.mp3" },
-        { name: "The Perfect Girl", file: "music/music14.mp3" },
-        { name: "Those Eyes", file: "music/music15.mp3" }
-       
-    ];
+  const MUSIC_TRACKS = [
+    { name: "• L’Art Du Savoir • (Slowed)", file: "music1.mp3" },
+    { name: "505", file: "music2.mp3" },
+    { name: "Ecstacy", file: "music3.mp3" },
+    { name: "Headlock", file: "music4.mp3" },
+    { name: "Wael Kfoury - Layel W Raad _ وائل كفوري - ليل و رعد", file: "music5.mp3" },
+    { name: "I love you so", file: "music6.mp3" },
+    { name: "I'll Keep You Safe", file: "music7.mp3" },
+    { name: "Meen Ysadak", file: "music8.mp3" },
+    { name: "Not Allowed", file: "music9.mp3" },
+    { name: "Ragebait", file: "music10.mp3" },
+    { name: "schnuffel - bunny party (slowed + reverb)", file: "music11.mp3" },
+    { name: "Self Aware", file: "music12.mp3" },
+    { name: "Me and you", file: "music13.mp3" },
+    { name: "The Perfect Girl", file: "music14.mp3" },
+    { name: "Those Eyes", file: "music15.mp3" }
+];
 
   function imgs(prefix, count) {
     const list = [];
