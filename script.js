@@ -28,35 +28,39 @@ function owSupabase() {
     // =====================================================
    const MUSIC_TRACKS = [
         { name: "• L’Art Du Savoir • (Slowed)", file: "./music/music1.mp3" },
-        { name: "505", file: "./music/music2.mp3" },
-        { name: "Ecstacy", file: "./music/music3.mp3" },
-        { name: "Headlock", file: "./music/music4.mp3" },
-        { name: "Wael Kfoury - Layel W Raad _ وائل كفوري - ليل و رعد", file: "./music/music5.mp3" },
-        { name: "I love you so", file: "./music/music6.mp3" },
-        { name: "I'll Keep You Safe", file: "./music/music7.mp3" },
-        { name: "Meen Ysadak", file: "./music/music8.mp3" },
-        { name: "Not Allowed", file: "./music/music9.mp3" },
-        { name: "Ragebait", file: "./music/music10.mp3" },
-        { name: "schnuffel - bunny party (slowed + reverb)", file: "./music/music11.mp3" },
-        { name: "Self Aware", file: "./music/music12.mp3" },
-        { name: "Me and you", file: "./music/music13.mp3" },
-        { name: "The Perfect Girl", file: "./music/music14.mp3" },
-        { name: "Those Eyes", file: "./music/music15.mp3" }
+        { name: "505", file: "music/music2.mp3" },
+        { name: "Ecstacy", file: "music/music3.mp3" },
+        { name: "Headlock", file: "music/music4.mp3" },
+        { name: "Wael Kfoury - Layel W Raad _ وائل كفوري - ليل و رعد", file: "music/music5.mp3" },
+        { name: "I love you so", file: "music/music6.mp3" },
+        { name: "I'll Keep You Safe", file: "music/music7.mp3" },
+        { name: "Meen Ysadak", file: "music/music8.mp3" },
+        { name: "Not Allowed", file: "music/music9.mp3" },
+        { name: "Ragebait", file: "music/music10.mp3" },
+        { name: "schnuffel - bunny party (slowed + reverb)", file: "music/music11.mp3" },
+        { name: "Self Aware", file: "music/music12.mp3" },
+        { name: "Me and you", file: "music/music13.mp3" },
+        { name: "The Perfect Girl", file: "music/music14.mp3" },
+        { name: "Those Eyes", file: "music/music15.mp3" }
        
     ];
 
   function imgs(prefix, count) {
-        const list = [];
-        for (let i = 1; i <= count; i++) list.push("./images/" + prefix + i + ".jpeg");
-        return list;
+    const list = [];
+
+    for (let i = 1; i <= count; i++) {
+        list.push(prefix + i + ".jpeg");
     }
 
+    return list;
+}
+
     const ALBUMS = {
-        nails:   { design: "elegant",    cover: "./images/nails3.jpeg",   photos: imgs("nails", 6) },
-        normal:  { design: "polaroid",   cover: "./images/normal3.jpeg",  photos: imgs("photo", 3).concat(imgs("normal", 7)) },
-        legs:    { design: "masonry",    cover: "./images/legs3.jpeg",    photos: imgs("legs", 5) },
-        private: { design: "featured",   cover: "./images/private3.jpeg", photos: imgs("private", 7), password: "5002" },
-        secret:  { design: "fullscreen", cover: "./images/secret4.png",  photos: imgs("secret", 15),  password: "4002" }
+        nails:   { design: "elegant",    cover: "images/nails3.jpeg",   photos: imgs("nails", 6) },
+        normal:  { design: "polaroid",   cover: "images/normal3.jpeg",  photos: imgs("photo", 3).concat(imgs("normal", 7)) },
+        legs:    { design: "masonry",    cover: "images/legs3.jpeg",    photos: imgs("legs", 5) },
+        private: { design: "featured",   cover: "images/private3.jpeg", photos: imgs("private", 7), password: "5002" },
+        secret:  { design: "fullscreen", cover: "images/secret4.png",  photos: imgs("secret", 15),  password: "4002" }
     };
 
     // Used by extras.js -> checkFiles() to find photos / songs missing on the live site
