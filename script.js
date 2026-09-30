@@ -55,37 +55,11 @@ function imgs(prefix, count) {
 }
 
 const ALBUMS = {
-    nails: {
-        design: "elegant",
-        cover: "nails3.jpeg",
-        photos: imgs("nails", 6)
-    },
-
-    normal: {
-        design: "polaroid",
-        cover: "normal3.jpeg",
-        photos: imgs("photo", 3).concat(imgs("normal", 7))
-    },
-
-    legs: {
-        design: "masonry",
-        cover: "legs3.jpeg",
-        photos: imgs("legs", 5)
-    },
-
-    private: {
-        design: "featured",
-        cover: "private3.jpeg",
-        photos: imgs("private", 7),
-        password: "5002"
-    },
-
-    secret: {
-        design: "fullscreen",
-        cover: "secret4.png",
-        photos: imgs("secret", 15),
-        password: "4002"
-    }
+    nails:   { design: "elegant",    cover: "nails3.jpeg",   photos: imgs("nails", 6) },
+    normal:  { design: "polaroid",   cover: "normal3.jpeg",  photos: imgs("photo", 3).concat(imgs("normal", 7)) },
+    legs:    { design: "masonry",    cover: "legs3.jpeg",    photos: imgs("legs", 5) },
+    private: { design: "featured",   cover: "private3.jpeg", photos: imgs("private", 7), password: "5002" },
+    secret:  { design: "fullscreen", cover: "secret4.png",  photos: imgs("secret", 15), password: "4002" }
 };
 
     // Used by extras.js -> checkFiles() to find photos / songs missing on the live site
